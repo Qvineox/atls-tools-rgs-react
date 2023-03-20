@@ -1,0 +1,64 @@
+@import 'src/styles/index';
+
+.page-content {
+  padding: 0 1.5vw;
+}
+
+header {
+  align-self: flex-start;
+
+  margin: 20px 0 0 10px;
+  font-size: 2rem;
+  font-weight: bold;
+
+  color: $color-gunmetal;
+  border-bottom: 2px solid $color-light-slate;
+
+  width: 30%;
+}
+
+.home-panel {
+  align-self: flex-start;
+
+  display: flex;
+  flex-direction: row;
+
+  width: 97vw;
+  min-height: 40vh;
+  margin-top: 20px;
+
+  //border: 2px solid green;
+
+  .left-panel {
+    //border: 2px solid blue;
+    flex-basis: 75%;
+  }
+
+  .right-panel {
+    //border: 2px solid red;
+    flex-basis: 25%;
+
+    h2 {
+      padding: 0;
+      border-bottom: 2px solid $color-light-slate;
+      width: 100%;
+      text-align: end;
+    }
+
+    ul.recent-reports {
+      list-style: none;
+
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: flex-end;
+
+      gap: 10px;
+
+      li {
+        //margin: 0 20px;
+        width: 100%;
+      }
+    }
+  }
+}

@@ -9,5 +9,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module" module-name="YDLysak" />
+    <orderEntry type="module" module-name="atls-golang" />
   </component>
 </module>

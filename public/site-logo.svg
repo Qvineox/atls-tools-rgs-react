@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg viewBox="123.256 37.21 183.139 168.605" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient gradientUnits="userSpaceOnUse" cx="199.001" cy="169.175" r="57.69" id="gradient-1" gradientTransform="matrix(-1.570594, -1.322688, 2.095216, -2.487913, 219.886892, 776.721621)">
+      <stop offset="0" style="stop-color: rgb(77, 41, 255);"/>
+      <stop offset="1" style="stop-color: rgb(142, 174, 255);"/>
+    </radialGradient>
+    <radialGradient gradientUnits="userSpaceOnUse" cx="213.663" cy="120.317" r="75.291" id="gradient-2" gradientTransform="matrix(0.752897, 0, 0, 0.752897, 55.7038, 29.149327)">
+      <stop offset="0" style="stop-color: rgba(0, 0, 0, 0)"/>
+      <stop offset="1" style="stop-color: rgba(0, 0, 0, 0)"/>
+    </radialGradient>
+    <linearGradient gradientUnits="userSpaceOnUse" x1="213.663" y1="45.026" x2="213.663" y2="195.608" id="gradient-0" spreadMethod="pad" gradientTransform="matrix(0.620584, 0.426296, -0.656966, 0.956382, 167.395466, -84.228491)">
+      <stop offset="0" style="stop-color: rgb(255, 131, 131);"/>
+      <stop offset="1" style="stop-color: rgb(255, 252, 230);"/>
+    </linearGradient>
+  </defs>
+  <ellipse style="stroke: url(#gradient-2); stroke-width: 0px; fill: url(#gradient-0); paint-order: fill;" cx="216.57" cy="119.735" rx="56.686" ry="56.686"/>
+  <path style="fill: url(#gradient-1); stroke: rgba(0, 0, 0, 0);" d="M 160.613 61.934 L 208.279 222.491 L 254.476 131.236 L 275.993 148.3 L 271.588 68.731 L 214.646 96.959 L 235.587 115.783 L 216.196 157.478 L 160.613 61.934 Z" transform="matrix(0.325184, 0.945651, -0.945651, 0.325184, 272.986654, -123.826884)"/>
+</svg>

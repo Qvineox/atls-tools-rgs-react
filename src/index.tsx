@@ -1,17 +1,96 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
+import './styles/index.scss';
 import reportWebVitals from './reportWebVitals';
+import {
+    createBrowserRouter,
+    RouterProvider,
+} from "react-router-dom";
+import Home from "./components/pages/home";
+import Tools from "./components/pages/tools";
+import Statistics from "./components/pages/statistics";
+import History from "./components/pages/history";
+import Search from "./components/pages/search";
+import DailyAccessTool from "./components/pages/tools/daily-access";
+import Root from "./components/pages/root";
+import ToolsMenu from "./components/pages/tools/menu";
+import WeeklyAccessTool from "./components/pages/tools/weekly-access";
+import SecurityBlockTool from "./components/pages/tools/security-block";
+import RegularBlockTool from "./components/pages/tools/regular-block";
+import WeeklyBlockTool from "./components/pages/tools/weekly-block";
+import Report from "./components/pages/report";
+import AddForeignEmployeesTool from "./components/pages/tools/add-foreign-employees";
 
-const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
+const router = createBrowserRouter([
+    {
+        path: "/",
+        element: <Root/>,
+        children: [
+            {
+                path: "/home",
+                element: <Home/>,
+            },
+            {
+                path: '/history',
+                element: <History/>,
+            },
+            {
+                path: '/reports/:reportId',
+                element: <Report/>,
+            },
+            {
+                path: '/tools',
+                element: <Tools/>,
+                children: [
+                    {
+                        path: '/tools/menu',
+                        element: <ToolsMenu/>
+                    },
+                    {
+                        path: '/tools/daily-access',
+                        element: <DailyAccessTool/>
+                    },
+                    {
+                        path: '/tools/weekly-access',
+                        element: <WeeklyAccessTool/>
+                    },
+                    {
+                        path: '/tools/weekly-block',
+                        element: <WeeklyBlockTool/>
+                    },
+                    {
+                        path: '/tools/regular-block',
+                        element: <RegularBlockTool/>
+                    },
+                    {
+                        path: '/tools/security-block',
+                        element: <SecurityBlockTool/>
+                    },
+                    {
+                        path: '/tools/create-foreign-employees',
+                        element: <AddForeignEmployeesTool/>
+                    },
+                ]
+            },
+            {
+                path: '/search',
+                element: <Search/>,
+            },
+            {
+                path: '/statistics',
+                element: <Statistics/>,
+            }
+        ]
+    },
+]);
+
+
+ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
+    // <React.StrictMode>
+    <RouterProvider router={router}/>
+    // </React.StrictMode>
 );
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
