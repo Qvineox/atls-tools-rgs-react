@@ -1,0 +1,23 @@
+.tool-from-errors-group {
+  font-family: "Courier New", sans-serif;
+
+  display: flex;
+  flex-direction: column;
+
+  justify-content: end;
+  align-items: end;
+
+  margin-left: auto;
+
+  font-size: 0.9rem;
+  user-select: none;
+
+  span#errors {
+    margin-top: 10px;
+    white-space: pre-line;
+
+    font-size: 1rem;
+    font-weight: bold;
+    color: #ff2821;
+  }
+}

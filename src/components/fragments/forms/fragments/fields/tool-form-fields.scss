@@ -1,0 +1,92 @@
+.tool-form-parameter {
+  background-color: #d6d9de;
+
+  min-height: 3vh;
+
+  padding: 2px 5px;
+  font-size: 1rem;
+
+  border-radius: 2px;
+
+  display: flex;
+
+
+  input, label {
+    margin-left: 10px;
+  }
+
+  &_text-field {
+    background-color: whitesmoke;
+    margin: 0 10px 0 10px;
+
+    min-height: 2vh;
+  }
+
+  &_checkbox-field {
+    flex-direction: row;
+    align-items: center;
+
+    input {
+      height: 1.2rem;
+      width: 1.2rem;
+    }
+
+    label {
+      margin-left: 5px;
+    }
+  }
+
+  &_file-upload-field {
+    flex-direction: column;
+    align-items: start;
+
+    label {
+      margin-bottom: 5px;
+    }
+
+    input {
+      background-color: #d6d9de;
+    }
+  }
+
+  &_date-field {
+    flex-direction: column;
+    align-items: start;
+
+    input {
+      margin-top: 5px;
+      padding: 2px 5px;
+      min-width: 55%;
+
+      border: 1px solid #282c34;
+    }
+  }
+
+  &_textarea-field {
+    flex-direction: column;
+
+    textarea {
+      min-height: 5rem;
+      margin: 5px 10px 0 10px;
+      padding: 5px;
+    }
+  }
+
+  &_text-field {
+    margin-left: 0;
+
+    flex-direction: column;
+    background-color: #d6d9de;
+
+    input {
+      margin: 2px 0 0 10px;
+      padding: 2px 5px;
+      background-color: whitesmoke;
+      border: 1px solid #282c34;
+    }
+  }
+
+  &:not(:last-child) {
+    margin-bottom: 5px;
+  }
+}

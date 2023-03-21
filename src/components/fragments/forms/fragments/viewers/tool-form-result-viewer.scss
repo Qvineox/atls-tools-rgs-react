@@ -1,0 +1,277 @@
+$color-accent: #d1dcec;
+
+.tool-form-result-viewer {
+  flex-basis: 70%;
+  margin-top: 20px;
+  min-height: 70vh;
+
+  display: flex;
+  flex-direction: column;
+  justify-items: center;
+  align-items: flex-start;
+
+  gap: 1vh 0;
+
+  &.hidden {
+    opacity: 1;
+  }
+
+  &.visible {
+    opacity: 1;
+  }
+
+  .tool-form-result {
+    width: 100%;
+
+    background-color: #d6d9de;
+    box-shadow: 4px 4px 4px 0 rgba(34, 60, 80, 0.2);
+
+    h2 {
+      margin: 10px 20px;
+    }
+
+    &_table {
+      min-height: 20vh;
+
+      .table-container {
+        padding: 0 20px 10px 20px;
+
+        table {
+          margin: 10px 0 2vh 0;
+          width: 100%;
+
+          thead, tfoot {
+            td {
+              font-weight: bold;
+              background-color: $color-accent;
+            }
+          }
+
+          thead, tbody, tfoot {
+            tr {
+              td {
+                padding: 2px 5px;
+
+                &.separator {
+                  background-color: $color-accent;
+                  font-weight: bold;
+                }
+
+                p.hint {
+                  font-style: italic;
+                  font-size: 0.85rem;
+                  margin: 0 0 5px 0;
+                }
+              }
+            }
+          }
+
+          &.detailed-agreements {
+            td.service-name {
+              width: 55%;
+            }
+
+            td.allowed {
+              width: 15%;
+            }
+
+            td.denied {
+              width: 15%;
+            }
+
+            td.summary {
+              width: 15%;
+            }
+          }
+
+          &.detailed-blocks {
+            td.system-name {
+              width: 20%;
+            }
+
+            td.login {
+              width: 30%;
+            }
+
+            td.full-name {
+              width: 50%;
+            }
+          }
+        }
+
+
+
+        table, tr, td {
+          border: 2px solid #4c4d4f;
+          border-collapse: collapse;
+        }
+      }
+    }
+
+    &_diagram {
+      .diagram-container {
+        padding: 0 20px 10px 20px;
+        min-height: 400px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+
+    &_files {
+      min-height: 20vh;
+
+      .files-container {
+        padding: 0 20px;
+
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+
+        align-items: baseline;
+        justify-content: start;
+
+        gap: 10px 20px;
+
+        .file-info {
+          flex-basis: 20%;
+          flex-grow: 0.2;
+
+          background-color: #d1dcec;
+          box-shadow: 4px 4px 4px 0 rgba(34, 60, 80, 0.2);
+          border: 1px solid #4c4d4f;
+
+          display: flex;
+          flex-direction: column;
+
+          h2 {
+            width: 90%;
+            margin: 5px 0 5px 5%;
+            border-bottom: 2px solid #282c34;
+          }
+
+          a {
+            margin: 0 5%;
+            text-decoration: none;
+
+            &:last-child {
+              margin: 0 0 5px 5%;
+            }
+          }
+
+          p {
+            margin: 0 0 5px 5%;
+            opacity: 0.75;
+          }
+        }
+      }
+    }
+  }
+}
+
+.tool-form-result-viewer_extended {
+  flex-basis: 70%;
+  min-height: 70vh;
+  margin-top: 20px;
+
+  display: flex;
+  flex-direction: row;
+
+  justify-content: flex-end;
+  align-items: start;
+  gap: 0 1vw;
+
+  .tool-form-result-summary {
+    flex-basis: 25%;
+    min-height: 30vh;
+
+    background-color: #d6d9de;
+    box-shadow: 4px 4px 4px 0 rgba(34, 60, 80, 0.2);
+
+    h2, p {
+      margin: 10px 20px;
+    }
+
+    p {
+      white-space: pre-line;
+
+      font-family: "Courier New", sans-serif;
+      line-height: 1.5rem;
+    }
+  }
+
+  .tool-form-result-viewer {
+    margin-top: 0;
+  }
+}
+
+.blocked-employee-card {
+  padding: 5px 10px;
+
+  border-top: 2px solid #282c34;
+  border-bottom: 2px solid #282c34;
+
+  h3 {
+    margin: 0;
+  }
+
+  a, p {
+    margin: 5px 0 10px 0;
+    text-decoration: none;
+  }
+
+  table {
+    &.system-accounts {
+      td.system-name {
+        width: 10%;
+      }
+
+      td.login {
+        width: 20%;
+      }
+
+      td.full-name {
+        width: 30%;
+      }
+
+      td.is-technical {
+        width: 10%;
+      }
+
+      td.is-active {
+        width: 10%;
+      }
+
+      td.block-date {
+        width: 20%;
+      }
+    }
+
+    &.domain-accounts {
+      td.login {
+        width: 10%;
+      }
+
+      td.full-name {
+        width: 20%;
+      }
+
+      td.email {
+        width: 20%;
+      }
+
+      td.is-technical {
+        width: 10%;
+      }
+
+      td.is-active {
+        width: 10%;
+      }
+
+      td.expire-date {
+        width: 20%;
+      }
+    }
+  }
+}

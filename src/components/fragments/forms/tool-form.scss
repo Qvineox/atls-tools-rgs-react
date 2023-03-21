@@ -1,0 +1,24 @@
+form.tool-form {
+  flex-basis: 20%;
+  flex-grow: 1;
+
+  padding: 20px;
+
+  display: flex;
+  flex-direction: column;
+  justify-items: center;
+  align-content: space-around;
+
+  gap: 1vh 0;
+
+  form.setup-form {
+    flex-basis: 26%;
+    min-height: 400px;
+
+    display: flex;
+
+    flex-direction: column;
+    gap: 10px 0;
+    padding-top: 10px;
+  }
+}

@@ -20,6 +20,12 @@ import RegularBlockTool from "./components/pages/tools/regular-block";
 import WeeklyBlockTool from "./components/pages/tools/weekly-block";
 import Report from "./components/pages/report";
 import AddForeignEmployeesTool from "./components/pages/tools/add-foreign-employees";
+import {AgreementsDefaultSummaryTool} from "./components/pages/new-tools/agreements/defaultSummaryTool";
+import ToolRoot from "./components/pages/new-tools/toolsRoot";
+import {AgreementsDetailedSummaryTool} from "./components/pages/new-tools/agreements/detailedSummaryTool";
+import {BlockListsDetailedSummaryTool} from "./components/pages/new-tools/blocklists/detailedSummaryTool";
+import {BlockListsRegularTool} from "./components/pages/new-tools/blocklists/regularBlockListTool";
+import {SecurityBlockListTool} from "./components/pages/new-tools/blocklists/securityBlockListTool";
 
 const router = createBrowserRouter([
     {
@@ -37,6 +43,32 @@ const router = createBrowserRouter([
             {
                 path: '/reports/:reportId',
                 element: <Report/>,
+            },
+            {
+                path: '/new-tools',
+                element: <ToolRoot/>,
+                children: [
+                    {
+                        path: '/new-tools/agreements-default',
+                        element: <AgreementsDefaultSummaryTool/>
+                    },
+                    {
+                        path: '/new-tools/agreements-detailed',
+                        element: <AgreementsDetailedSummaryTool/>
+                    },
+                    {
+                        path: '/new-tools/blocklist-detailed',
+                        element: <BlockListsDetailedSummaryTool/>
+                    },
+                    {
+                        path: '/new-tools/blocklist-regular',
+                        element: <BlockListsRegularTool/>
+                    },
+                    {
+                        path: '/new-tools/blocklist-security',
+                        element: <SecurityBlockListTool/>
+                    }
+                ]
             },
             {
                 path: '/tools',
