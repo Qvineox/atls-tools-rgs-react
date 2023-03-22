@@ -11,7 +11,7 @@ export default function Navbar() {
                 <NavLink to={'/history'} className={({isActive}) =>
                     isActive ? 'navigation-bar__link_active' : 'navigation-bar__link'
                 }>История</NavLink>
-                <NavLink to={'/tools/menu'} className={({isActive}) =>
+                <NavLink to={'/tools-menu'} className={({isActive}) =>
                     isActive ? 'navigation-bar__link_active' : 'navigation-bar__link'
                 }>Инструменты</NavLink>
                 <NavLink to={'/search'} className={({isActive}) =>

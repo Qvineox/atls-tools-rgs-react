@@ -21,6 +21,8 @@
     align-self: center;
 
     width: 95vw;
+    min-height: 4rem;
+    height: 5vh;
     padding: 25px 0 20px 0;
 
     border-bottom: 2px solid #dadada;
@@ -45,6 +47,7 @@
       height: 30px;
       width: 15vw;
       min-width: 200px;
+      min-height: 1.5rem;
 
       border-radius: 2px;
       border: 1px solid $color-gunmetal;

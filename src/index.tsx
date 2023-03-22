@@ -17,6 +17,7 @@ import {BlockListsDetailedSummaryTool} from "./components/pages/new-tools/blockl
 import {BlockListsRegularTool} from "./components/pages/new-tools/blocklists/regularBlockListTool";
 import {SecurityBlockListTool} from "./components/pages/new-tools/blocklists/securityBlockListTool";
 import History from "./components/pages/history/history";
+import ToolsMenu from "./components/pages/new-tools/tools-menu/toolMenu";
 
 const router = createBrowserRouter([
     {
@@ -24,7 +25,7 @@ const router = createBrowserRouter([
         element: <Root/>,
         children: [
             {
-                path: "/home",
+                path: '/home',
                 element: <Home/>,
             },
             {
@@ -36,27 +37,31 @@ const router = createBrowserRouter([
                 element: <Fragment/>, // TODO
             },
             {
-                path: '/new-tools',
+                path: '/tools-menu',
+                element: <ToolsMenu/>
+            },
+            {
+                path: '/tools',
                 element: <ToolRoot/>,
                 children: [
                     {
-                        path: '/new-tools/agreements-default',
+                        path: '/tools/agreements-default',
                         element: <AgreementsDefaultSummaryTool/>
                     },
                     {
-                        path: '/new-tools/agreements-detailed',
+                        path: '/tools/agreements-detailed',
                         element: <AgreementsDetailedSummaryTool/>
                     },
                     {
-                        path: '/new-tools/blocklist-detailed',
+                        path: '/tools/blocklist-detailed',
                         element: <BlockListsDetailedSummaryTool/>
                     },
                     {
-                        path: '/new-tools/blocklist-regular',
+                        path: '/tools/blocklist-regular',
                         element: <BlockListsRegularTool/>
                     },
                     {
-                        path: '/new-tools/blocklist-security',
+                        path: '/tools/blocklist-security',
                         element: <SecurityBlockListTool/>
                     }
                 ]
