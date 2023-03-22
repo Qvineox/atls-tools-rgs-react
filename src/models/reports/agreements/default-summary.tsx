@@ -1,7 +1,8 @@
 import axios from "axios";
-import React, {Fragment} from "react";
+import React from "react";
 import ReactApexChart from "react-apexcharts";
 import {ApexOptions} from "apexcharts";
+import {ToolResponse, ToolResponseError} from "../reports";
 
 const API_ROUTE = "/api/reporting/processing/agreements/default"
 const chartOptions: ApexOptions = {
@@ -34,18 +35,21 @@ const chartOptions: ApexOptions = {
     }
 }
 
+
+interface IAgreementsDefaultSummaryResult {
+    allowed: number
+    denied: number
+    working: number
+    other: number
+}
+
 export class AgreementsDefaultSummary {
-    private readonly allowed: number
-    private readonly denied: number
-    private readonly working: number
-    private readonly other: number
+    report_id: number
+    result: IAgreementsDefaultSummaryResult
 
-
-    constructor(allowed: number, denied: number, working: number, other: number) {
-        this.allowed = allowed
-        this.denied = denied
-        this.working = working
-        this.other = other
+    constructor(report_id: number, result: { allowed: number; denied: number; working: number; other: number; }) {
+        this.report_id = report_id
+        this.result = result
     }
 
     static async send(file: File, save: boolean) {
@@ -58,19 +62,23 @@ export class AgreementsDefaultSummary {
             formData.append('save', save ? 'true' : 'false')
         }
 
-        // const response = await axios.post(process.env.REACT_APP_BACKEND_URL + API_ROUTE, formData, {
-        //     headers: {
-        //         "Content-Type": "multipart/form-data",
-        //     }
-        // })
-        //
-        // if (response.status === 200) {
-        //     const toolResponse: AgreementsDefaultSummary = response.data
-        //
-        //     return new AgreementsDefaultSummary(toolResponse.allowed, toolResponse.denied, toolResponse.working, toolResponse.other)
-        // } throw new Error(response.data)
+        const response = await axios.post(process.env.REACT_APP_BACKEND_URL + API_ROUTE, formData, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            }
+        })
 
-        return new AgreementsDefaultSummary(54, 6, 2, 7)
+        if (response.status < 300) {
+            const toolResponse: ToolResponse = response.data
+
+            if (toolResponse) {
+                const summary: AgreementsDefaultSummary = response.data as AgreementsDefaultSummary
+
+                if (summary) {
+                    return new AgreementsDefaultSummary(summary.report_id, summary.result)
+                } else throw new Error(`JSON decoding error`)
+            } else throw new Error(`Empty tool response`)
+        } else throw response.data as ToolResponseError
     }
 
     static async load(id: number) {
@@ -79,15 +87,24 @@ export class AgreementsDefaultSummary {
 
     public Render() {
         return (<ReactApexChart height={'400px'} width={'600px'} type={'donut'}
-                                series={[this.allowed, this.denied, this.working]}
+                                series={[this.result.allowed, this.result.denied, this.result.working]}
                                 options={chartOptions}/>)
     }
 
     public Summary() {
-        return `Отчет сохранен.\n
-                Всего согласований: ${this.allowed + this.denied}\n
-                Согласовано: ${this.allowed}
-                Отклонено: ${this.denied}\nВ работе: ${this.working}
-                Другой статус: ${this.other}`
+        if (this.report_id !== 0) {
+            return `Файл обработан.
+                Отчет сохранен. ID#${this.report_id}\n
+                Всего согласований: ${this.result.allowed + this.result.denied}\n
+                Согласовано: ${this.result.allowed}
+                Отклонено: ${this.result.denied}\nВ работе: ${this.result.working}
+                Другой статус: ${this.result.other}`
+        } else {
+            return `Файл обработан.\n
+                Всего согласований: ${this.result.allowed + this.result.denied}\n
+                Согласовано: ${this.result.allowed}
+                Отклонено: ${this.result.denied}\nВ работе: ${this.result.working}
+                Другой статус: ${this.result.other}`
+        }
     }
 }

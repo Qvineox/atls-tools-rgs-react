@@ -4,30 +4,28 @@ import ToolFormFieldGroup from "../../../fragments/forms/fragments/groups/toolFo
 import ToolFormButtonGroup from "../../../fragments/forms/fragments/groups/toolFormButtonGroup";
 import {ToolFormCheckBoxField} from "../../../fragments/forms/fragments/fields/toolFormCheckBoxField";
 import {ToolFormErrorGroup} from "../../../fragments/forms/fragments/groups/toolFormErrorGroup";
-import ToolFormFileUploadField from "../../../fragments/forms/fragments/fields/toolFormFileUploadField";
-import {
-    ToolFormResultExtendedViewer, ToolFormResultViewer
-} from "../../../fragments/forms/fragments/viewers/toolFormResultViewer";
+import {ToolFormResultViewer} from "../../../fragments/forms/fragments/viewers/toolFormResultViewer";
 import ToolFormResultTable from "../../../fragments/forms/fragments/viewers/toolFormResultTable";
-
 import ToolFormResultFiles from "../../../fragments/forms/fragments/viewers/toolFormResultFiles";
-import {BlockListsDetailedSummary} from "../../../../models/reports/blocklists/detailed-summary";
-import moment from "moment";
-import {ToolFormDatePeriodField} from "../../../fragments/forms/fragments/fields/toolFormDatePeriodField";
-import {ToolFormDateField} from "../../../fragments/forms/fragments/fields/toolFormDateField";
 import SecurityBlocklist from "../../../../models/reports/blocklists/security-blocklist";
 import {ToolFormTextField} from "../../../fragments/forms/fragments/fields/toolFormTextField";
 import {ToolFormTextAreaField} from "../../../fragments/forms/fragments/fields/toolFormTextAreaField";
+import ToolFormResultLoading from "../../../fragments/forms/fragments/viewers/toolFormResultLoading";
 
 export function SecurityBlockListTool() {
     const [reportData, setReportData] = useState<SecurityBlocklist>()
 
+    const [employeeIDs, setEmployeeIDs] = useState<string>("")
+
     const [blockLeaks, setBlockLeaks] = useState<boolean>(true)
     const [blockSystems, setBlockSystems] = useState<boolean>(true)
     const [blockDomain, setBlockDomain] = useState<boolean>(true)
-    const [leaveComment, setLeaveComment] = useState<boolean>(false)
 
-    const [employeeIDs, setEmployeeIDs] = useState<string>("")
+    const [blockTechnical, setBlockTechnical] = useState<boolean>(false)
+    const [blockLocked, setBlockLocked] = useState<boolean>(false)
+    const [blockDeleted, setBlockDeleted] = useState<boolean>(false)
+
+    const [leaveComment, setLeaveComment] = useState<boolean>(false)
     const [initiator, setInitiator] = useState<string>("")
     const [requestID, setRequestID] = useState<string>("")
 
@@ -36,6 +34,7 @@ export function SecurityBlockListTool() {
     const [errors, setErrors] = useState<Array<string>>(["Блокируемые ID не указаны!"])
 
     const [isLoaded, setIsLoaded] = useState<boolean>(false)
+    const [isRequested, setIsRequested] = useState<boolean>(false)
 
     function resetForm() {
         setBlockLeaks(true)
@@ -50,19 +49,25 @@ export function SecurityBlockListTool() {
 
         setSave(true)
         setErrors(["Блокируемые ID не указаны!"])
+
+        setIsLoaded(false)
+        setIsRequested(false)
     }
 
     function submitForm(evt: React.FormEvent<HTMLFormElement>) {
         evt.preventDefault()
+
+        setIsRequested(true)
 
         if (blockLeaks || blockDomain || blockSystems) {
             const _ids = employeeIDs.split(',').map(item => {
                 return parseInt(item)
             })
 
-            SecurityBlocklist.send(blockLeaks, blockSystems, blockDomain, leaveComment, _ids, initiator, requestID, save).then(reportData => {
+            SecurityBlocklist.send(blockLeaks, blockSystems, blockDomain, blockTechnical, blockLocked, blockDeleted, leaveComment, _ids, initiator, requestID, save).then(reportData => {
                 if (reportData) {
                     setReportData(reportData)
+                    setIsLoaded(true)
                 }
             }).catch(error => {
                 console.error(error)
@@ -126,6 +131,15 @@ export function SecurityBlockListTool() {
                                        value={blockDomain} controller={setBlockDomain}/>
             </ToolFormFieldGroup>
             <ToolFormFieldGroup>
+                <ToolFormCheckBoxField name={'block-technical'} label={'Блокировать технические учетные записи'}
+                                       value={blockTechnical}
+                                       controller={setBlockTechnical}/>
+                <ToolFormCheckBoxField name={'block-locked'} label={'Блокировать ранее заблокированные учетные записи'}
+                                       value={blockLocked} controller={setBlockLocked}/>
+                <ToolFormCheckBoxField name={'block-deleted'} label={'Блокировать удаленные учетные записи'}
+                                       value={blockDeleted} controller={setBlockDeleted}/>
+            </ToolFormFieldGroup>
+            <ToolFormFieldGroup>
                 <ToolFormCheckBoxField name={'comment'} label={'Оставить комментарий'} value={leaveComment}
                                        controller={setLeaveComment}/>
                 {
@@ -140,15 +154,22 @@ export function SecurityBlockListTool() {
             <ToolFormFieldGroup>
                 <ToolFormCheckBoxField name={'save'} label={'Сохранить'} value={save} controller={setSave}/>
             </ToolFormFieldGroup>
-            <ToolFormButtonGroup isDisabled={errors.length != 0}/>
+            <ToolFormButtonGroup isDisabled={errors.length !== 0}/>
             <ToolFormErrorGroup errors={errors}/>
         </ToolForm>
-        <ToolFormResultViewer isLoaded={isLoaded}>
-            {reportData ? <Fragment>
-                <ToolFormResultFiles files={reportData.GetFiles()}/>
-                {/*<ToolFormResultDiagram diagram={reportData.Render()}/>*/}
-                <ToolFormResultTable table={reportData.Render()}/>
-            </Fragment> : <Fragment></Fragment>}
-        </ToolFormResultViewer>
+        {
+            isRequested ? <Fragment>
+                {
+                    isLoaded && reportData ?
+                        <ToolFormResultViewer isLoaded={isLoaded}>
+                            {reportData ? <Fragment>
+                                <ToolFormResultFiles name={'Списки на блокировку'} files={reportData.GetFiles()}/>
+                                {/*<ToolFormResultDiagram diagram={reportData.Render()}/>*/}
+                                <ToolFormResultTable table={reportData.Render()}/>
+                            </Fragment> : <Fragment></Fragment>}
+                        </ToolFormResultViewer> : <ToolFormResultLoading/>
+                }
+            </Fragment> : <Fragment/>
+        }
     </Fragment>
 }

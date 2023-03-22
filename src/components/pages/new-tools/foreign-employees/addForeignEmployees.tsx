@@ -1,6 +1,6 @@
 import React, {Fragment, useEffect, useState} from "react";
 import moment, {Moment} from "moment";
-import '../../../styles/pages/tools.scss'
+import '../../../../styles/pages/tools.scss'
 import axios from "axios";
 
 interface IForeignCompany {
@@ -91,7 +91,7 @@ export default function AddForeignEmployeesTool() {
                     curator_id: undefined,
                     leave_date: moment().add(2, "years").toISOString().slice(0, 10),
                 })
-            }} action="" className="setup-form">
+            }} action="tools" className="setup-form">
                 <div className="tool-parameter-group text-area">
                     <label htmlFor="full-name">Полное ФИО</label>
                     <input value={selectedEmployeeData.full_name} onChange={(evt) => {

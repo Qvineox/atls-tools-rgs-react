@@ -1,7 +1,9 @@
-import {ToolResponseFile} from "../reports";
+import {IToolResponseFile, ToolResponse} from "../reports";
 import React from "react";
+import axios from "axios";
 
-const API_ROUTE = "/api/reporting/processing/agreements/detailed"
+const API_ROUTE_DETAILED = "/api/reporting/processing/blocks/detailed"
+const API_ROUTE_REGULAR = "/api/reporting/processing/blocks/regular"
 
 interface ISystemAccount {
     login: string
@@ -9,28 +11,25 @@ interface ISystemAccount {
 }
 
 interface IBlocksBySystem {
-    count: number
-    accounts: Array<ISystemAccount>
+    [key: string]: { count: number, accounts: Array<ISystemAccount> };
+}
+
+interface IBlockListsDetailedSummaryResult {
+    fired_accounts_blocked: number
+    decree_accounts_blocked: number
+    fired_blocklist_by_system: IBlocksBySystem
+    decree_blocklist_by_system: IBlocksBySystem
 }
 
 export class BlockListsDetailedSummary {
-    fired_accounts_blocked: number
-    decree_accounts_blocked: number
-    fired_blocklist_by_system: Map<string, IBlocksBySystem>
-    decree_blocklist_by_system: Map<string, IBlocksBySystem>
-    private files: Array<ToolResponseFile>
+    report_id: number
+    result: IBlockListsDetailedSummaryResult
+    files: Array<IToolResponseFile>
 
-    constructor(fired_accounts_blocked: number, decree_accounts_blocked: number, fired_blocklist_by_system: Map<string, IBlocksBySystem>, decree_blocklist_by_system: Map<string, IBlocksBySystem>) {
-        this.fired_accounts_blocked = fired_accounts_blocked
-        this.decree_accounts_blocked = decree_accounts_blocked
-        this.fired_blocklist_by_system = fired_blocklist_by_system
-        this.decree_blocklist_by_system = decree_blocklist_by_system
-
-        this.files = []
-    }
-
-    protected addFiles(files: Array<ToolResponseFile>) {
-        this.files = this.files.concat(files)
+    constructor(report_id: number, result: IBlockListsDetailedSummaryResult, files: Array<IToolResponseFile>) {
+        this.report_id = report_id
+        this.result = result
+        this.files = files
     }
 
     static async send(startDate: string, endDate: string, save: boolean) {
@@ -40,50 +39,23 @@ export class BlockListsDetailedSummary {
         formData.append('end_date', endDate)
         formData.append('save', save ? 'true' : 'false')
 
-        // const response = await axios.post(process.env.REACT_APP_BACKEND_URL + API_ROUTE, formData, {
-        //     headers: {
-        //         "Content-Type": "multipart/form-data",
-        //     }
-        // })
-        //
-        // if (response.status === 200) {
-        //     const toolResponse: AgreementsDetailedSummary = response.data
-        //
-        //     return new AgreementsDetailedSummary(toolResponse.total_allowed,
-        //         toolResponse.total_denied,
-        //         toolResponse.total_other,
-        //         toolResponse.unrecognised_services,
-        //         toolResponse.missing_table_field,
-        //         toolResponse.services
-        //     )
-        // }
-        // throw new Error(response.data)
+        const response = await axios.post(process.env.REACT_APP_BACKEND_URL + API_ROUTE_DETAILED, formData, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            }
+        })
 
-        let summary = new BlockListsDetailedSummary(54, 6, new Map<string, IBlocksBySystem>([['ИС1', {
-            accounts: [{login: 'test1', full_name: "test test test"}],
-            count: 12
-        }], ['ИС2', {
-            accounts: [{login: 'test1', full_name: "test test test"}, {login: 'test2', full_name: "test test test"}],
-            count: 22
-        }]]), new Map<string, IBlocksBySystem>([['ИС1', {
-            accounts: [{login: 'test3', full_name: "test test test"}],
-            count: 12
-        }]]))
+        if (response.status < 300) {
+            const toolResponse: ToolResponse = response.data
 
-        summary.addFiles(new Array<ToolResponseFile>({
-            FileName: "Тест1",
-            Description: "https://yandex.ru",
-            PublicURL: "https://yandex.ru"
-        }))
-        summary.addFiles(new Array<ToolResponseFile>({
-            FileName: "Тест2",
-            Description: "Описание 2",
-            PublicURL: "https://yandex.ru"
-        }))
+            if (toolResponse) {
+                const summary: BlockListsDetailedSummary = response.data as BlockListsDetailedSummary
 
-        console.log(summary)
-
-        return summary
+                if (summary) {
+                    return new BlockListsDetailedSummary(summary.report_id, summary.result, summary.files)
+                } else throw new Error(`JSON decoding error`)
+            } else throw new Error(`Empty tool response`)
+        }
     }
 
     static async sendBlocklist(firedFile: File | undefined, decreeFile: File | undefined, domainFile: File | undefined, save: boolean) {
@@ -101,70 +73,46 @@ export class BlockListsDetailedSummary {
 
         formData.append('save', save ? 'true' : 'false')
 
-        // const response = await axios.post(process.env.REACT_APP_BACKEND_URL + API_ROUTE, formData, {
-        //     headers: {
-        //         "Content-Type": "multipart/form-data",
-        //     }
-        // })
-        //
-        // if (response.status === 200) {
-        //     const toolResponse: AgreementsDetailedSummary = response.data
-        //
-        //     return new AgreementsDetailedSummary(toolResponse.total_allowed,
-        //         toolResponse.total_denied,
-        //         toolResponse.total_other,
-        //         toolResponse.unrecognised_services,
-        //         toolResponse.missing_table_field,
-        //         toolResponse.services
-        //     )
-        // }
-        // throw new Error(response.data)
+        const response = await axios.post(process.env.REACT_APP_BACKEND_URL + API_ROUTE_REGULAR, formData, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            }
+        })
 
-        let summary = new BlockListsDetailedSummary(54, 6, new Map<string, IBlocksBySystem>([['ИС1', {
-            accounts: [{login: 'test1', full_name: "test test test"}],
-            count: 12
-        }], ['ИС2', {
-            accounts: [{login: 'test1', full_name: "test test test"}, {login: 'test2', full_name: "test test test"}],
-            count: 22
-        }]]), new Map<string, IBlocksBySystem>([['ИС1', {
-            accounts: [{login: 'test3', full_name: "test test test"}],
-            count: 12
-        }]]))
+        if (response.status === 200) {
+            const toolResponse: ToolResponse = response.data
 
-        summary.addFiles(new Array<ToolResponseFile>({
-            FileName: "Тест1",
-            Description: "https://yandex.ru",
-            PublicURL: "https://yandex.ru"
-        }))
-        summary.addFiles(new Array<ToolResponseFile>({
-            FileName: "Тест2",
-            Description: "Описание 2",
-            PublicURL: "https://yandex.ru"
-        }))
+            if (toolResponse) {
+                const summary: BlockListsDetailedSummary = response.data as BlockListsDetailedSummary
 
-        console.log(summary)
-
-        return summary
+                if (summary) {
+                    return new BlockListsDetailedSummary(summary.report_id, summary.result, summary.files)
+                } else throw new Error(`JSON decoding error`)
+            } else throw new Error(`Empty tool response`)
+        }
     }
 
     public Render() {
         let rows: Array<JSX.Element> = []
+        let index: number = 0
 
-        if (this.fired_blocklist_by_system.size > 0) {
-            rows.push(<tr>
+        console.debug(this.result.fired_blocklist_by_system)
+
+        if (this.result.fired_blocklist_by_system) {
+            rows.push(<tr key={index++}>
                 <td className={'separator'} colSpan={3}>Уволенные сотрудники</td>
             </tr>)
-            this.fired_blocklist_by_system.forEach((blocksBySystem, systemName) => {
-                blocksBySystem.accounts.forEach((value, index) => {
-                    if (index != 0) {
-                        rows.push(<tr key={index}>
+            Object.entries(this.result.fired_blocklist_by_system).forEach(entry => {
+                entry[1].accounts.forEach((value, index_) => {
+                    if (index_ !== 0) {
+                        rows.push(<tr key={index++}>
                             <td className={'login'}>{value.login}</td>
                             <td className={'full-name'}>{value.full_name}</td>
                         </tr>)
                     } else {
-                        rows.push(<tr key={index}>
-                            <td rowSpan={blocksBySystem.accounts.length} className={'system-name'}>{systemName}<br/><p
-                                className={'hint'}>(Всего: {blocksBySystem.accounts.length})</p></td>
+                        rows.push(<tr key={index++}>
+                            <td rowSpan={entry[1].accounts.length} className={'system-name'}>{entry[0]}<br/><p
+                                className={'hint'}>(Всего: {entry[1].accounts.length})</p></td>
                             <td className={'login'}>{value.login}</td>
                             <td className={'full-name'}>{value.full_name}</td>
                         </tr>)
@@ -173,29 +121,29 @@ export class BlockListsDetailedSummary {
             })
         }
 
-        if (this.decree_blocklist_by_system.size > 0) {
-            rows.push(<tr>
+        if (this.result.decree_blocklist_by_system) {
+            rows.push(<tr key={index++}>
                 <td className={'separator'} colSpan={3}>Сотрудники в декрете</td>
             </tr>)
-            this.decree_blocklist_by_system.forEach((blocksBySystem, systemName) => {
-                blocksBySystem.accounts.forEach((value, index) => {
-                    if (index != 0) {
-                        rows.push(<tr key={index}>
+            Object.entries(this.result.decree_blocklist_by_system).forEach(entry => {
+                entry[1].accounts.forEach((value, index_) => {
+                    if (index_ !== 0) {
+                        rows.push(<tr key={index++}>
                             <td className={'login'}>{value.login}</td>
                             <td className={'full-name'}>{value.full_name}</td>
                         </tr>)
                     } else {
-                        rows.push(<tr key={index}>
-                            <td rowSpan={blocksBySystem.accounts.length} className={'system-name'}>{systemName}<br/><p
-                                className={'hint'}>(Всего: {blocksBySystem.accounts.length})</p></td>
+                        rows.push(<tr key={index++}>
+                            <td rowSpan={entry[1].accounts.length} className={'system-name'}>{entry[0]}<br/><p
+                                className={'hint'}>(Всего: {entry[1].accounts.length})</p></td>
                             <td className={'login'}>{value.login}</td>
                             <td className={'full-name'}>{value.full_name}</td>
                         </tr>)
                     }
                 })
             })
-        }
 
+        }
 
         return (<table className={'detailed-blocks'}>
             <thead>
@@ -225,14 +173,41 @@ export class BlockListsDetailedSummary {
     }
 
     public GetSummary() {
-        return `Отчет сохранен.\n
-                Всего заблокированных: ${this.decree_accounts_blocked + this.fired_accounts_blocked}
-                Уволенных: ${this.fired_accounts_blocked}
-                В декрете: ${this.decree_accounts_blocked}\n
-                Систем затронуто: ${this.fired_blocklist_by_system.size + this.decree_blocklist_by_system.size}`
+        let totalSystems: number = 0
+
+        if (this.result.fired_blocklist_by_system) {
+            totalSystems += Object.entries(this.result?.fired_blocklist_by_system).length
+        }
+
+        if (this.result.decree_blocklist_by_system) {
+            totalSystems += Object.entries(this.result?.decree_blocklist_by_system).length
+        }
+
+        if (this.report_id !== 0) {
+            return `Файлы обработаны.
+                Отчет сохранен. ID#${this.report_id}\n
+                Всего заблокированных: ${this.result.decree_accounts_blocked + this.result.fired_accounts_blocked}
+                Уволенных: ${this.result.fired_accounts_blocked}
+                В декрете: ${this.result.decree_accounts_blocked}\n
+                Систем затронуто: ${totalSystems}`
+        } else {
+            return `Файлы обработаны.\n
+                Всего заблокированных: ${this.result.decree_accounts_blocked + this.result.fired_accounts_blocked}
+                Уволенных: ${this.result.fired_accounts_blocked}
+                В декрете: ${this.result.decree_accounts_blocked}\n
+                Систем затронуто: ${totalSystems}`
+        }
     }
 
-    public GetFiles() {
-        return this.files
+    public GetFiredFiles() {
+        return this.files.filter((item) => {
+            return item.file_name.includes('Декрет.')
+        })
+    }
+
+    public GetDecreeFiles() {
+        return this.files.filter((item) => {
+            return !item.file_name.includes('Декрет.')
+        })
     }
 }

@@ -1,109 +1,61 @@
-import React, {Fragment, ReactNode} from "react";
-import {ApexOptions} from "apexcharts";
-import {ToolResponseFile} from "../reports";
+import React from "react";
+import {ToolResponse, ToolResponseError, IToolResponseFile} from "../reports";
+import axios from "axios";
 
 const API_ROUTE = "/api/reporting/processing/agreements/detailed"
-const chartOptions: ApexOptions = {
-    chart: {
-        zoom: {
-            enabled: true
-        },
-        height: '20vh',
-    },
-    colors: [
-        '#53af0c', '#d33e3e', '#ffa631'
-    ],
-    labels: [
-        'Согласовано', 'Отказано', 'В работе'
-    ],
-    stroke: {
-        show: false
-    },
-    dataLabels: {
-        enabled: true,
-        style: {
-            colors: [
-                'whitesmoke'
-            ],
-            fontSize: '1rem'
-        }
-    },
-    legend: {
-        position: 'bottom'
-    }
+
+interface IStatsByService {
+    [key: string]: { allowed: number, denied: number };
+}
+
+interface IAgreementsDetailedSummaryResult {
+    total_allowed: number
+    total_denied: number
+    total_other: number
+    unrecognised_services: number
+    missing_table_field: number
+    services: IStatsByService
 }
 
 export class AgreementsDetailedSummary {
-    private readonly total_allowed: number
-    private readonly total_denied: number
-    private readonly total_other: number
-    private readonly unrecognised_services: number
-    private readonly missing_table_field: number
-    private readonly services: Map<string, { allowed: number, denied: number }>
-    private files: Array<ToolResponseFile>
+    report_id: number
+    result: IAgreementsDetailedSummaryResult
+    files: Array<IToolResponseFile>
 
-    constructor(total_allowed: number, total_denied: number, total_other: number, unrecognised_services: number, missing_table_field: number, services: Map<string, { allowed: number, denied: number }>) {
-        this.total_allowed = total_allowed
-        this.total_denied = total_denied
-        this.total_other = total_other
-        this.unrecognised_services = unrecognised_services
-        this.missing_table_field = missing_table_field
-        this.services = services
-
-        this.files = []
+    constructor(report_id: number, result: IAgreementsDetailedSummaryResult, files: Array<IToolResponseFile>) {
+        this.report_id = report_id
+        this.result = result
+        this.files = files
     }
 
-    private addFiles(files: Array<ToolResponseFile>) {
-        this.files = this.files.concat(files)
-    }
-
-    static async send(file: File, save: boolean) {
+    static async send(file: File, save: boolean, saveFile: boolean) {
         const formData = new FormData()
 
         if (file === undefined) {
             return alert('Файл не загружен')
         } else {
             formData.append('file_upload', file)
-            formData.append('save', save ? 'true' : 'false')
+            formData.append('file', file ? 'true' : 'false')
+            formData.append('save', saveFile ? 'true' : 'false')
         }
 
-        // const response = await axios.post(process.env.REACT_APP_BACKEND_URL + API_ROUTE, formData, {
-        //     headers: {
-        //         "Content-Type": "multipart/form-data",
-        //     }
-        // })
-        //
-        // if (response.status === 200) {
-        //     const toolResponse: AgreementsDetailedSummary = response.data
-        //
-        //     return new AgreementsDetailedSummary(toolResponse.total_allowed,
-        //         toolResponse.total_denied,
-        //         toolResponse.total_other,
-        //         toolResponse.unrecognised_services,
-        //         toolResponse.missing_table_field,
-        //         toolResponse.services
-        //     )
-        // }
-        // throw new Error(response.data)
+        const response = await axios.post(process.env.REACT_APP_BACKEND_URL + API_ROUTE, formData, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            }
+        })
 
-        let summary = new AgreementsDetailedSummary(54, 6, 2, 2, 1, new Map<string, { allowed: number; denied: number }>(
-            [["сервис1", {allowed: 10, denied: 4}], ["сервис2", {allowed: 21, denied: 33}]]
-        ))
+        if (response.status < 300) {
+            const toolResponse: ToolResponse = response.data
 
-        summary.addFiles(new Array<ToolResponseFile>({
-            FileName: "Тест1",
-            Description: "https://yandex.ru",
-            PublicURL: "https://yandex.ru"
-        }))
-        summary.addFiles(new Array<ToolResponseFile>({
-            FileName: "Тест2",
-            Description: "Описание 2",
-            PublicURL: "https://yandex.ru"
-        }))
+            if (toolResponse) {
+                const summary: AgreementsDetailedSummary = response.data as AgreementsDetailedSummary
 
-        console.log(summary)
-
-        return summary
+                if (summary) {
+                    return new AgreementsDetailedSummary(summary.report_id, summary.result, summary.files)
+                } else throw new Error(`JSON decoding error`)
+            } else throw new Error(`Empty tool response`)
+        } else throw response.data as ToolResponseError
     }
 
     private async load(id: number) {
@@ -114,12 +66,12 @@ export class AgreementsDetailedSummary {
         let rows: Array<JSX.Element> = []
         let index: number = 0
 
-        this.services.forEach((value, key) => {
+        Object.entries(this.result.services).forEach(entry => {
             rows.push(<tr key={index}>
-                <td>{key}</td>
-                <td>{value.allowed}</td>
-                <td>{value.denied}</td>
-                <td>{value.allowed + value.denied}</td>
+                <td>{entry[0]}</td>
+                <td>{entry[1].allowed}</td>
+                <td>{entry[1].denied}</td>
+                <td>{entry[1].allowed + entry[1].denied}</td>
             </tr>)
 
             index += 1
@@ -150,21 +102,31 @@ export class AgreementsDetailedSummary {
             <tfoot>
             <tr>
                 <td className={'service-name'}>Всего</td>
-                <td className={'allowed'}>{this.total_allowed}</td>
-                <td className={'denied'}>{this.total_denied}</td>
-                <td className={'summary'}>{this.total_allowed + this.total_denied}</td>
+                <td className={'allowed'}>{this.result.total_allowed}</td>
+                <td className={'denied'}>{this.result.total_denied}</td>
+                <td className={'summary'}>{this.result.total_allowed + this.result.total_denied}</td>
             </tr>
             </tfoot>
         </table>)
     }
 
     public GetSummary() {
-        return `Отчет сохранен.\n
-                Всего согласований: ${this.total_allowed + this.total_denied}
-                Всего систем: ${this.services.size}\n
-                Согласовано: ${this.total_allowed}
-                Отклонено: ${this.total_denied}
-                Другой статус: ${this.total_other}`
+        if (this.report_id !== 0) {
+            return `Файл обработан.
+                Отчет сохранен. ID#${this.report_id}\n
+                Всего согласований: ${this.result.total_allowed + this.result.total_denied}
+                Всего систем: ${Object.entries(this.result.services).length}\n
+                Согласовано: ${this.result.total_allowed}
+                Отклонено: ${this.result.total_denied}
+                Другой статус: ${this.result.total_other}`
+        } else {
+            return `Файл обработан.\n
+                Всего согласований: ${this.result.total_allowed + this.result.total_denied}
+                Всего систем: ${Object.entries(this.result.services).length}\n
+                Согласовано: ${this.result.total_allowed}
+                Отклонено: ${this.result.total_denied}
+                Другой статус: ${this.result.total_other}`
+        }
     }
 
     public GetFiles() {

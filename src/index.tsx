@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Fragment} from 'react';
 import ReactDOM from 'react-dom/client';
 import './styles/index.scss';
 import reportWebVitals from './reportWebVitals';
@@ -6,26 +6,17 @@ import {
     createBrowserRouter,
     RouterProvider,
 } from "react-router-dom";
-import Home from "./components/pages/home";
-import Tools from "./components/pages/tools";
-import Statistics from "./components/pages/statistics";
-import History from "./components/pages/history";
-import Search from "./components/pages/search";
-import DailyAccessTool from "./components/pages/tools/daily-access";
+import Home from "./components/pages/home/home";
+import Statistics from "./components/pages/statistics/statistics";
+import Search from "./components/pages/search/search";
 import Root from "./components/pages/root";
-import ToolsMenu from "./components/pages/tools/menu";
-import WeeklyAccessTool from "./components/pages/tools/weekly-access";
-import SecurityBlockTool from "./components/pages/tools/security-block";
-import RegularBlockTool from "./components/pages/tools/regular-block";
-import WeeklyBlockTool from "./components/pages/tools/weekly-block";
-import Report from "./components/pages/report";
-import AddForeignEmployeesTool from "./components/pages/tools/add-foreign-employees";
 import {AgreementsDefaultSummaryTool} from "./components/pages/new-tools/agreements/defaultSummaryTool";
 import ToolRoot from "./components/pages/new-tools/toolsRoot";
 import {AgreementsDetailedSummaryTool} from "./components/pages/new-tools/agreements/detailedSummaryTool";
 import {BlockListsDetailedSummaryTool} from "./components/pages/new-tools/blocklists/detailedSummaryTool";
 import {BlockListsRegularTool} from "./components/pages/new-tools/blocklists/regularBlockListTool";
 import {SecurityBlockListTool} from "./components/pages/new-tools/blocklists/securityBlockListTool";
+import History from "./components/pages/history/history";
 
 const router = createBrowserRouter([
     {
@@ -42,7 +33,7 @@ const router = createBrowserRouter([
             },
             {
                 path: '/reports/:reportId',
-                element: <Report/>,
+                element: <Fragment/>, // TODO
             },
             {
                 path: '/new-tools',
@@ -68,40 +59,6 @@ const router = createBrowserRouter([
                         path: '/new-tools/blocklist-security',
                         element: <SecurityBlockListTool/>
                     }
-                ]
-            },
-            {
-                path: '/tools',
-                element: <Tools/>,
-                children: [
-                    {
-                        path: '/tools/menu',
-                        element: <ToolsMenu/>
-                    },
-                    {
-                        path: '/tools/daily-access',
-                        element: <DailyAccessTool/>
-                    },
-                    {
-                        path: '/tools/weekly-access',
-                        element: <WeeklyAccessTool/>
-                    },
-                    {
-                        path: '/tools/weekly-block',
-                        element: <WeeklyBlockTool/>
-                    },
-                    {
-                        path: '/tools/regular-block',
-                        element: <RegularBlockTool/>
-                    },
-                    {
-                        path: '/tools/security-block',
-                        element: <SecurityBlockTool/>
-                    },
-                    {
-                        path: '/tools/create-foreign-employees',
-                        element: <AddForeignEmployeesTool/>
-                    },
                 ]
             },
             {

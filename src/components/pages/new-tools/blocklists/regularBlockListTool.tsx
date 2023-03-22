@@ -12,6 +12,7 @@ import ToolFormResultTable from "../../../fragments/forms/fragments/viewers/tool
 
 import ToolFormResultFiles from "../../../fragments/forms/fragments/viewers/toolFormResultFiles";
 import {BlockListsDetailedSummary} from "../../../../models/reports/blocklists/detailed-summary";
+import ToolFormResultLoading from "../../../fragments/forms/fragments/viewers/toolFormResultLoading";
 
 export function BlockListsRegularTool() {
     const [reportData, setReportData] = useState<BlockListsDetailedSummary>()
@@ -24,6 +25,7 @@ export function BlockListsRegularTool() {
 
     const [errors, setErrors] = useState<Array<string>>(["Файл не загружен!"])
 
+    const [isRequested, setIsRequested] = useState<boolean>(false)
     const [isLoaded, setIsLoaded] = useState<boolean>(false)
 
     function resetForm() {
@@ -32,15 +34,21 @@ export function BlockListsRegularTool() {
         setDomainFile(undefined)
 
         setSave(true)
+
+        setIsLoaded(false)
+        setIsRequested(false)
     }
 
     function submitForm(evt: React.FormEvent<HTMLFormElement>) {
         evt.preventDefault()
 
+        setIsRequested(true)
+
         if (firedFile || decreeFile || domainFile) {
             BlockListsDetailedSummary.sendBlocklist(firedFile, decreeFile, domainFile, save).then(reportData => {
                 if (reportData) {
                     setReportData(reportData)
+                    setIsLoaded(true)
                 }
             }).catch(error => {
                 console.error(error)
@@ -78,15 +86,22 @@ export function BlockListsRegularTool() {
             <ToolFormFieldGroup>
                 <ToolFormCheckBoxField name={'save'} label={'Сохранить'} value={save} controller={setSave}/>
             </ToolFormFieldGroup>
-            <ToolFormButtonGroup isDisabled={errors.length != 0}/>
+            <ToolFormButtonGroup isDisabled={errors.length !== 0}/>
             <ToolFormErrorGroup errors={errors}/>
         </ToolForm>
-        <ToolFormResultExtendedViewer isLoaded={isLoaded} summary={reportData?.GetSummary()}>
-            {reportData ? <Fragment>
-                <ToolFormResultFiles files={reportData.GetFiles()}/>
-                {/*<ToolFormResultDiagram diagram={reportData.Render()}/>*/}
-                <ToolFormResultTable table={reportData.Render()}/>
-            </Fragment> : <Fragment></Fragment>}
-        </ToolFormResultExtendedViewer>
+        {
+            isRequested ? <Fragment>
+                {
+                    isLoaded && reportData ?
+                        <ToolFormResultExtendedViewer isLoaded={isLoaded} summary={reportData?.GetSummary()}>
+                            {reportData ? <Fragment>
+                                <ToolFormResultFiles name={'Списки уволенных работников'} files={reportData.GetFiredFiles()}/>
+                                <ToolFormResultFiles name={'Списки работников в декрете'} files={reportData.GetDecreeFiles()}/>
+                                <ToolFormResultTable table={reportData.Render()}/>
+                            </Fragment> : <Fragment></Fragment>}
+                        </ToolFormResultExtendedViewer> : <ToolFormResultLoading/>
+                }
+            </Fragment> : <Fragment/>
+        }
     </Fragment>
 }

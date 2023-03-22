@@ -1,6 +1,5 @@
 import {IEmployeeCardPreview} from "../../models/employeeCard";
 import React, {Fragment, useEffect, useState} from "react";
-import '../../styles/fragments/employeeCards.scss'
 
 interface IEmployeeCardPreviewProps {
     data: IEmployeeCardPreview,

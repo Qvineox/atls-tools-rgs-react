@@ -1,9 +1,9 @@
-import Navbar from "../navigation/navbar";
+import Navbar from "../../navigation/navbar";
 import {Fragment, useState} from "react";
 import moment from "moment";
 import 'moment/locale/ru'
 
-import '../../styles/pages/home.scss'
+import './home.scss'
 
 export default function Home() {
     document.title = 'Домашняя страница'

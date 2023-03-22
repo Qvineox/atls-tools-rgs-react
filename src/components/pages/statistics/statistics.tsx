@@ -1,10 +1,9 @@
-import React, {Fragment, useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {ApexOptions} from "apexcharts";
 import moment from "moment";
 import ReactApexChart from "react-apexcharts";
-import "../../styles/pages/statistics.scss"
+import "./statistics.scss"
 import axios from "axios";
-import {ISecurityBlocksResult} from "./tools/security-block";
 
 
 interface IAgreementReportData {

@@ -1,4 +1,4 @@
-import '../../styles/fragments/navigationTab.scss';
+import './navbar.scss';
 import {NavLink} from "react-router-dom";
 
 export default function Navbar() {

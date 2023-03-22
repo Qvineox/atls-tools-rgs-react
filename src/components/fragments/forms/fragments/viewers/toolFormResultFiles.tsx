@@ -1,9 +1,10 @@
 import {Fragment} from "react";
-import {ToolResponseFile} from "../../../../../models/reports/reports";
+import {IToolResponseFile} from "../../../../../models/reports/reports";
 import {Link} from "react-router-dom";
 
 interface IToolFormResultFilesProps {
-    files: Array<ToolResponseFile>
+    name: string
+    files: Array<IToolResponseFile>
 }
 
 export default function ToolFormResultFiles(props: IToolFormResultFilesProps) {
@@ -11,12 +12,12 @@ export default function ToolFormResultFiles(props: IToolFormResultFilesProps) {
 
     return <Fragment>
         {
-            props.files.length > 0 ? <div className="tool-form-result tool-form-result_files">
-                <h2>Собранные файлы</h2>
+            props.files?.length > 0 ? <div className="tool-form-result tool-form-result_files">
+                <h2>{props.name}</h2>
                 <div className={`files-container`}>
                     {props.files.map((file, index) => {
-                        return <ResultFile key={index} FileName={file.FileName} PublicURL={file.PublicURL}
-                                           Description={file.Description}/>
+                        return <ResultFile key={index} file_name={file.file_name} public_url={file.public_url}
+                                           description={file.description}/>
                     })}
                 </div>
             </div> : <Fragment/>
@@ -24,13 +25,13 @@ export default function ToolFormResultFiles(props: IToolFormResultFilesProps) {
     </Fragment>
 }
 
-function ResultFile(props: ToolResponseFile) {
+function ResultFile(props: IToolResponseFile) {
     return (<div className={`file-info`}>
-        <h2>{props.FileName}</h2>
-        <Link to={props.PublicURL}>Скачивание файла</Link>
+        <h2>{props.file_name}</h2>
+        <Link to={props.public_url}>Скачивание файла</Link>
         {
-            props.Description.includes("http") ? <Link to={props.Description}>Доп. ссылка</Link> :
-                <p>{props.Description}</p>
+            props.description?.includes("http") ? <Link to={props.description}>Доп. ссылка</Link> :
+                <p>{props.description}</p>
         }
 
     </div>)

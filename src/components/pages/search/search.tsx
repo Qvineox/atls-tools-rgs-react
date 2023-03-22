@@ -1,8 +1,8 @@
 import React, {ChangeEvent, Fragment, useEffect, useState} from "react";
-import Navbar from "../navigation/navbar";
-import '../../styles/pages/search.scss'
-import {IEmployeeAssignment, IEmployeeCardFull, IEmployeeCardPreview} from "../../models/employeeCard";
-import {EmployeeCardPreview} from "../fragments/employeeCards";
+import Navbar from "../../navigation/navbar";
+import './search.scss'
+import {IEmployeeAssignment, IEmployeeCardFull, IEmployeeCardPreview} from "../../../models/employeeCard";
+import {EmployeeCardPreview} from "../../fragments/employeeCards";
 import axios from "axios";
 import moment from "moment";
 

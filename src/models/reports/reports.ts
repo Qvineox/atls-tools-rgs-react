@@ -1,26 +1,31 @@
 export class ToolResponse {
-    ReportId: number
-    Result: any
-    Files: Array<ToolResponseFile>
+    report_id: number
+    result: string
+    files: Array<IToolResponseFile>
 
-    constructor(reportId: number, result: string, files: Array<ToolResponseFile>) {
-        this.ReportId = reportId
-        this.Result = result
-        this.Files = files
+    constructor(reportId: number, result: string, files: Array<IToolResponseFile>) {
+        this.report_id = reportId
+        this.result = result
+        this.files = files
     }
 }
 
-export class ToolResponseFile {
-    readonly FileName: string
-    readonly PublicURL: string
-    readonly Description: string
+export class ToolResponseError {
+    message: string
+    description: number
 
-    constructor(fileName: string, url: string, description: string) {
-        this.FileName = fileName
-        this.PublicURL = url
-        this.Description = description
+    constructor(message: string, description: number) {
+        this.message = message
+        this.description = description
     }
 }
+
+export interface IToolResponseFile {
+    readonly file_name: string
+    readonly public_url: string
+    readonly description: string
+}
+
 
 
 

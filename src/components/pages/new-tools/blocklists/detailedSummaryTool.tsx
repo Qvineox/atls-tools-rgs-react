@@ -4,7 +4,6 @@ import ToolFormFieldGroup from "../../../fragments/forms/fragments/groups/toolFo
 import ToolFormButtonGroup from "../../../fragments/forms/fragments/groups/toolFormButtonGroup";
 import {ToolFormCheckBoxField} from "../../../fragments/forms/fragments/fields/toolFormCheckBoxField";
 import {ToolFormErrorGroup} from "../../../fragments/forms/fragments/groups/toolFormErrorGroup";
-import ToolFormFileUploadField from "../../../fragments/forms/fragments/fields/toolFormFileUploadField";
 import {
     ToolFormResultExtendedViewer
 } from "../../../fragments/forms/fragments/viewers/toolFormResultViewer";
@@ -13,8 +12,9 @@ import ToolFormResultTable from "../../../fragments/forms/fragments/viewers/tool
 import ToolFormResultFiles from "../../../fragments/forms/fragments/viewers/toolFormResultFiles";
 import {BlockListsDetailedSummary} from "../../../../models/reports/blocklists/detailed-summary";
 import moment from "moment";
-import {ToolFormDatePeriodField} from "../../../fragments/forms/fragments/fields/toolFormDatePeriodField";
 import {ToolFormDateField} from "../../../fragments/forms/fragments/fields/toolFormDateField";
+import ToolFormResultDiagram from "../../../fragments/forms/fragments/viewers/toolFormResultDiagram";
+import ToolFormResultLoading from "../../../fragments/forms/fragments/viewers/toolFormResultLoading";
 
 export function BlockListsDetailedSummaryTool() {
     const [reportData, setReportData] = useState<BlockListsDetailedSummary>()
@@ -27,6 +27,7 @@ export function BlockListsDetailedSummaryTool() {
 
     const [errors, setErrors] = useState<Array<string>>(["Файл не загружен!"])
 
+    const [isRequested, setIsRequested] = useState<boolean>(false)
     const [isLoaded, setIsLoaded] = useState<boolean>(false)
 
     function resetForm() {
@@ -36,10 +37,15 @@ export function BlockListsDetailedSummaryTool() {
         setStartDate(today.subtract(1, 'week').toISOString().slice(0, 10))
 
         setSave(true)
+
+        setIsRequested(false)
+        setIsLoaded(false)
     }
 
     function submitForm(evt: React.FormEvent<HTMLFormElement>) {
         evt.preventDefault()
+
+        setIsRequested(true)
 
         if (startDate && endDate) {
             let _startDate = moment(startDate)
@@ -51,6 +57,7 @@ export function BlockListsDetailedSummaryTool() {
             BlockListsDetailedSummary.send(_startDate.toISOString(), _endDate.toISOString(), save).then(reportData => {
                 if (reportData) {
                     setReportData(reportData)
+                    setIsLoaded(true)
                 }
             }).catch(error => {
                 console.error(error)
@@ -77,21 +84,29 @@ export function BlockListsDetailedSummaryTool() {
     return <Fragment>
         <ToolForm onReset={resetForm} onSubmit={(evt) => submitForm(evt)}>
             <ToolFormFieldGroup>
-                <ToolFormDateField name={'start_date'} label={'Начало периода'} value={startDate} controller={setStartDate}/>
+                <ToolFormDateField name={'start_date'} label={'Начало периода'} value={startDate}
+                                   controller={setStartDate}/>
                 <ToolFormDateField name={'end_date'} label={'Конец периода'} value={endDate} controller={setEndDate}/>
             </ToolFormFieldGroup>
             <ToolFormFieldGroup>
                 <ToolFormCheckBoxField name={'save'} label={'Сохранить'} value={save} controller={setSave}/>
             </ToolFormFieldGroup>
-            <ToolFormButtonGroup isDisabled={errors.length != 0}/>
+            <ToolFormButtonGroup isDisabled={errors.length !== 0}/>
             <ToolFormErrorGroup errors={errors}/>
         </ToolForm>
-        <ToolFormResultExtendedViewer isLoaded={isLoaded} summary={reportData?.GetSummary()}>
-            {reportData ? <Fragment>
-                <ToolFormResultFiles files={reportData.GetFiles()}/>
-                {/*<ToolFormResultDiagram diagram={reportData.Render()}/>*/}
-                <ToolFormResultTable table={reportData.Render()}/>
-            </Fragment> : <Fragment></Fragment>}
-        </ToolFormResultExtendedViewer>
+        {
+            isRequested ? <Fragment>
+                {
+                    isLoaded && reportData ?
+                        <ToolFormResultExtendedViewer isLoaded={isLoaded} summary={reportData?.GetSummary()}>
+                            {reportData ? <Fragment>
+                                <ToolFormResultFiles name={'Файл отчета'} files={reportData.GetFiredFiles()}/>
+                                {/*<ToolFormResultDiagram diagram={reportData.Render()}/>*/}
+                                <ToolFormResultTable table={reportData.Render()}/>
+                            </Fragment> : <Fragment></Fragment>}
+                        </ToolFormResultExtendedViewer> : <ToolFormResultLoading/>
+                }
+            </Fragment> : <Fragment/>
+        }
     </Fragment>
 }

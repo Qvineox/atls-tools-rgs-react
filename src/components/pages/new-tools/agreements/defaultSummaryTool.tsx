@@ -1,4 +1,4 @@
-import React, {FormEventHandler, Fragment, useEffect, useState} from "react";
+import React, {Fragment, useEffect, useState} from "react";
 import {AgreementsDefaultSummary} from "../../../../models/reports/agreements/default-summary";
 import {ToolForm} from "../../../fragments/forms/toolForm";
 import ToolFormFieldGroup from "../../../fragments/forms/fragments/groups/toolFormFieldGroup";
@@ -10,6 +10,7 @@ import ToolFormResultDiagram from "../../../fragments/forms/fragments/viewers/to
 import {
     ToolFormResultExtendedViewer
 } from "../../../fragments/forms/fragments/viewers/toolFormResultViewer";
+import ToolFormResultLoading from "../../../fragments/forms/fragments/viewers/toolFormResultLoading";
 
 export function AgreementsDefaultSummaryTool() {
     const [reportData, setReportData] = useState<AgreementsDefaultSummary>()
@@ -19,27 +20,34 @@ export function AgreementsDefaultSummaryTool() {
 
     const [errors, setErrors] = useState<Array<string>>(["Файл не загружен!"])
 
+    const [isRequested, setIsRequested] = useState<boolean>(false)
     const [isLoaded, setIsLoaded] = useState<boolean>(false)
 
     function resetForm() {
         setFileUpload(undefined)
         setSave(true)
+
+        setIsRequested(false)
+        setIsLoaded(false)
     }
 
     function submitForm(evt: React.FormEvent<HTMLFormElement>) {
         evt.preventDefault()
 
+        setIsRequested(true)
+
         if (fileUpload !== undefined) {
             AgreementsDefaultSummary.send(fileUpload, save).then(reportData => {
                 if (reportData) {
                     setReportData(reportData)
+                    setIsLoaded(true)
                 }
             }).catch(error => {
                 console.error(error)
             })
         }
 
-        console.log(reportData)
+
     }
 
     function checkForm() {
@@ -65,15 +73,20 @@ export function AgreementsDefaultSummaryTool() {
             <ToolFormFieldGroup>
                 <ToolFormCheckBoxField name={'save'} label={'Сохранить'} value={save} controller={setSave}/>
             </ToolFormFieldGroup>
-            <ToolFormButtonGroup isDisabled={errors.length != 0}/>
+            <ToolFormButtonGroup isDisabled={errors.length !== 0}/>
             <ToolFormErrorGroup errors={errors}/>
         </ToolForm>
-        <ToolFormResultExtendedViewer isLoaded={isLoaded} summary={reportData?.Summary()}>
-            {reportData ? <Fragment>
-                {/*<ToolFormResultFiles/>*/}
-                <ToolFormResultDiagram diagram={reportData.Render()}/>
-                {/*<ToolFormResultTable/>*/}
-            </Fragment> : <Fragment></Fragment>}
-        </ToolFormResultExtendedViewer>
+        {
+            isRequested ? <Fragment>
+                {
+                    isLoaded && reportData ?
+                        <ToolFormResultExtendedViewer isLoaded={isLoaded} summary={reportData?.Summary()}>
+                            <Fragment>
+                                <ToolFormResultDiagram diagram={reportData?.Render()}/>
+                            </Fragment>
+                        </ToolFormResultExtendedViewer> : <ToolFormResultLoading/>
+                }
+            </Fragment> : <Fragment/>
+        }
     </Fragment>
 }
