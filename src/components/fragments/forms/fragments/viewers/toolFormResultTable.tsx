@@ -1,4 +1,5 @@
 import {Fragment, ReactNode} from "react";
+import './tool-form-result-viewer.scss'
 
 interface IToolFormResultTable {
     table: ReactNode
@@ -6,11 +7,13 @@ interface IToolFormResultTable {
 
 export default function ToolFormResultTable(props: IToolFormResultTable) {
     return <Fragment>
-        <div className="tool-form-result tool-form-result_table">
-            <h2>Собранная таблица</h2>
-            <div className="table-container">
-                {props.table}
-            </div>
-        </div>
+        {
+            props.table ? <div className="tool-form-result tool-form-result_table">
+                <h2>Собранная таблица</h2>
+                <div className="table-container">
+                    {props.table}
+                </div>
+            </div> : <Fragment/>
+        }
     </Fragment>
 }

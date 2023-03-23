@@ -7,13 +7,13 @@ import {ToolFormErrorGroup} from "../../../fragments/forms/fragments/groups/tool
 import {ToolFormResultViewer} from "../../../fragments/forms/fragments/viewers/toolFormResultViewer";
 import ToolFormResultTable from "../../../fragments/forms/fragments/viewers/toolFormResultTable";
 import ToolFormResultFiles from "../../../fragments/forms/fragments/viewers/toolFormResultFiles";
-import SecurityBlocklist from "../../../../models/reports/blocklists/security-blocklist";
+import BlockListSecurityReport from "../../../../models/reports/blocklists/security-blocklist";
 import {ToolFormTextField} from "../../../fragments/forms/fragments/fields/toolFormTextField";
 import {ToolFormTextAreaField} from "../../../fragments/forms/fragments/fields/toolFormTextAreaField";
 import ToolFormResultLoading from "../../../fragments/forms/fragments/viewers/toolFormResultLoading";
 
 export function SecurityBlockListTool() {
-    const [reportData, setReportData] = useState<SecurityBlocklist>()
+    const [reportData, setReportData] = useState<BlockListSecurityReport>()
 
     const [employeeIDs, setEmployeeIDs] = useState<string>("")
 
@@ -64,7 +64,7 @@ export function SecurityBlockListTool() {
                 return parseInt(item)
             })
 
-            SecurityBlocklist.send(blockLeaks, blockSystems, blockDomain, blockTechnical, blockLocked, blockDeleted, leaveComment, _ids, initiator, requestID, save).then(reportData => {
+            BlockListSecurityReport.send(blockLeaks, blockSystems, blockDomain, blockTechnical, blockLocked, blockDeleted, leaveComment, _ids, initiator, requestID, save).then(reportData => {
                 if (reportData) {
                     setReportData(reportData)
                     setIsLoaded(true)
@@ -163,9 +163,9 @@ export function SecurityBlockListTool() {
                     isLoaded && reportData ?
                         <ToolFormResultViewer isLoaded={isLoaded}>
                             {reportData ? <Fragment>
-                                <ToolFormResultFiles name={'Списки на блокировку'} files={reportData.GetFiles()}/>
+                                <ToolFormResultFiles name={'Списки на блокировку'} files={reportData.getFiles()}/>
                                 {/*<ToolFormResultDiagram diagram={reportData.Render()}/>*/}
-                                <ToolFormResultTable table={reportData.Render()}/>
+                                <ToolFormResultTable table={reportData.renderTable()}/>
                             </Fragment> : <Fragment></Fragment>}
                         </ToolFormResultViewer> : <ToolFormResultLoading/>
                 }

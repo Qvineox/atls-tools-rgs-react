@@ -1,8 +1,8 @@
-import {IToolResponseFile, Report, ToolResponse} from "../reports";
+import {IToolResponseFile, Report} from "../reports";
 import React from "react";
 import axios from "axios";
 
-const API_ROUTE = "/api/reporting/processing/blocks/detailed"
+const API_ROUTE = "/api/reporting/processing/blocks/regular"
 
 interface ISystemAccount {
     login: string
@@ -20,7 +20,7 @@ interface IBlockListsDetailedContent {
     decree_blocklist_by_system: IBlocksBySystem
 }
 
-export class BlockListsDetailedReport extends Report {
+export class BlockListsRegularReport extends Report {
     result: IBlockListsDetailedContent
 
     constructor(report_id: number, result: IBlockListsDetailedContent, files: Array<IToolResponseFile>) {
@@ -28,11 +28,19 @@ export class BlockListsDetailedReport extends Report {
         this.result = result
     }
 
-    static async send(startDate: string, endDate: string, save: boolean) {
+    static async send(firedFile: File | undefined, decreeFile: File | undefined, domainFile: File | undefined, save: boolean) {
         const formData = new FormData()
 
-        formData.append('start_date', startDate)
-        formData.append('end_date', endDate)
+        if (firedFile !== undefined) {
+            formData.append('file_upload_fired', firedFile)
+        }
+        if (decreeFile !== undefined) {
+            formData.append('file_upload_decree', decreeFile)
+        }
+        if (domainFile !== undefined) {
+            formData.append('file_upload_domain', domainFile)
+        }
+
         formData.append('save', save ? 'true' : 'false')
 
         const response = await axios.post(process.env.REACT_APP_BACKEND_URL + API_ROUTE, formData, {
@@ -41,11 +49,11 @@ export class BlockListsDetailedReport extends Report {
             }
         })
 
-        if (response.status < 300) {
-            const summary: BlockListsDetailedReport = response.data as BlockListsDetailedReport
+        if (response.status === 200) {
+            const summary: BlockListsRegularReport = response.data as BlockListsRegularReport
 
             if (summary) {
-                return new BlockListsDetailedReport(summary.report_id, summary.result, summary.files)
+                return new BlockListsRegularReport(summary.report_id, summary.result, summary.files)
             } else throw new Error(`JSON decoding error`)
         }
     }
@@ -155,6 +163,18 @@ export class BlockListsDetailedReport extends Report {
                 В декрете: ${this.result.decree_accounts_blocked}\n
                 Систем затронуто: ${totalSystems}`
         }
+    }
+
+    public getFilesFired() {
+        return this.files.filter((item) => {
+            return !item.file_name.includes('Декрет.')
+        })
+    }
+
+    public getFilesDecree() {
+        return this.files.filter((item) => {
+            return item.file_name.includes('Декрет.')
+        })
     }
 
     load(): void {

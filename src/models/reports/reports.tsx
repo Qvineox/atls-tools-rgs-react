@@ -1,3 +1,5 @@
+import {ReactNode} from "react";
+
 export class ToolResponse {
     report_id: number
     result: string
@@ -26,6 +28,28 @@ export interface IToolResponseFile {
     readonly description: string
 }
 
+export abstract class Report {
+    report_id: number
+    result: any // main body of a report
+    files: Array<IToolResponseFile>
+
+    abstract renderTable(): ReactNode
+
+    abstract renderChart(): ReactNode
+
+    protected constructor(report_id: number, files: Array<IToolResponseFile>) {
+        this.report_id = report_id
+        this.files = files
+    }
+
+    abstract summary(): string
+
+    abstract load(): void
+
+    getFiles(): Array<IToolResponseFile> {
+        return this.files
+    }
+}
 
 
 

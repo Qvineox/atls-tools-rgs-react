@@ -8,14 +8,14 @@ import ToolFormFileUploadField from "../../../fragments/forms/fragments/fields/t
 import {
     ToolFormResultExtendedViewer
 } from "../../../fragments/forms/fragments/viewers/toolFormResultViewer";
-import {AgreementsDetailedSummary} from "../../../../models/reports/agreements/detailed-summary";
+import {AgreementsDetailedReport} from "../../../../models/reports/agreements/detailed-summary";
 import ToolFormResultTable from "../../../fragments/forms/fragments/viewers/toolFormResultTable";
 
 import ToolFormResultFiles from "../../../fragments/forms/fragments/viewers/toolFormResultFiles";
 import ToolFormResultLoading from "../../../fragments/forms/fragments/viewers/toolFormResultLoading";
 
 export function AgreementsDetailedSummaryTool() {
-    const [reportData, setReportData] = useState<AgreementsDetailedSummary>()
+    const [reportData, setReportData] = useState<AgreementsDetailedReport>()
 
     const [fileUpload, setFileUpload] = useState<File>()
     const [save, setSave] = useState<boolean>(true)
@@ -37,7 +37,7 @@ export function AgreementsDetailedSummaryTool() {
         setIsRequested(true)
 
         if (fileUpload !== undefined) {
-            AgreementsDetailedSummary.send(fileUpload, save, saveFile).then(reportData => {
+            AgreementsDetailedReport.send(fileUpload, save, saveFile).then(reportData => {
                 if (reportData) {
                     setReportData(reportData)
                     setIsLoaded(true)
@@ -80,11 +80,11 @@ export function AgreementsDetailedSummaryTool() {
             isRequested ? <Fragment>
                 {
                     isLoaded && reportData ?
-                        <ToolFormResultExtendedViewer isLoaded={isLoaded} summary={reportData?.GetSummary()}>
+                        <ToolFormResultExtendedViewer isLoaded={isLoaded} summary={reportData.GetSummary()}>
                             {reportData ? <Fragment>
-                                <ToolFormResultFiles name={'Файл отчета'} files={reportData.GetFiles()}/>
+                                <ToolFormResultFiles name={'Файл отчета'} files={reportData.getFiles()}/>
                                 {/*<ToolFormResultDiagram diagram={reportData.Render()}/>*/}
-                                <ToolFormResultTable table={reportData.Render()}/>
+                                <ToolFormResultTable table={reportData.renderTable()}/>
                             </Fragment> : <Fragment></Fragment>}
                         </ToolFormResultExtendedViewer> : <ToolFormResultLoading/>
                 }

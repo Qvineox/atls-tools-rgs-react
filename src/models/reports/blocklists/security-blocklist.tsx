@@ -1,7 +1,6 @@
 import {IDomainAccount, ISystemAccount} from "../../accounts/accounts";
-import {IToolResponseFile, ToolResponse} from "../reports";
+import {IToolResponseFile, Report} from "../reports";
 import React, {Fragment} from "react";
-import {Link} from "react-router-dom";
 import moment from "moment";
 import axios from "axios";
 
@@ -24,16 +23,12 @@ interface ISecurityBlocklistResult {
     blocked_employees: Array<IBlockListByEmployee>
 }
 
-export default class SecurityBlocklist {
-    report_id: number
+export default class BlockListSecurityReport extends Report {
     result: ISecurityBlocklistResult
-    files: Array<IToolResponseFile>
 
     constructor(report_id: number, result: ISecurityBlocklistResult, files: Array<IToolResponseFile>) {
-        this.report_id = report_id
+        super(report_id, files)
         this.result = result
-
-        this.files = files
     }
 
     static async send(blockLeaks: boolean, blockSystems: boolean, blockDomain: boolean, blockTechnical: boolean, blockLocked: boolean, blockDeleted: boolean, leaveComment: boolean, employeeIDs: Array<number>, initiator: string, requestID: string, save: boolean) {
@@ -65,20 +60,23 @@ export default class SecurityBlocklist {
         })
 
         if (response.status === 200) {
-            const toolResponse: ToolResponse = response.data
+            const summary: BlockListSecurityReport = response.data as BlockListSecurityReport
 
-            if (toolResponse) {
-                const summary: SecurityBlocklist = response.data as SecurityBlocklist
-
-                if (summary) {
-                    return new SecurityBlocklist(summary.report_id, summary.result, summary.files)
-                } else throw new Error(`JSON decoding error`)
-            } else throw new Error(`Empty tool response`)
+            if (summary) {
+                return new BlockListSecurityReport(summary.report_id, summary.result, summary.files)
+            } else throw new Error(`JSON decoding error`)
         }
     }
 
+    load(): void {
 
-    public Render() {
+    }
+
+    renderChart(): React.ReactNode {
+        return undefined;
+    }
+
+    renderTable(): React.ReactNode {
         return Object.entries(this.result.blocked_employees).map((value, index) => {
             return <BlockedEmployeeCards key={index} employee_id={value[1].employee_id}
                                          employee_full_name={value[1].employee_full_name}
@@ -87,17 +85,27 @@ export default class SecurityBlocklist {
         })
     }
 
-    public GetFiles() {
-        return this.files
+    summary(): string {
+        if (this.report_id !== 0) {
+            return `Файл обработан.
+                Отчет сохранен. ID#${this.report_id}\n
+                Заблокировано пользователей: ${this.result.blocked_employees.length}\n
+                Заблокировано УЗ в ИС: ${this.result.total_system_accounts_blocked}
+                Заблокировано УЗ в домене: ${this.result.total_domain_accounts_blocked}`
+        } else {
+            return `Файл обработан.\n
+                Заблокировано пользователей: ${this.result.blocked_employees.length}\n
+                Заблокировано УЗ в ИС: ${this.result.total_system_accounts_blocked}
+                Заблокировано УЗ в домене: ${this.result.total_domain_accounts_blocked}`
+        }
     }
 }
 
 function BlockedEmployeeCards(props: IBlockListByEmployee) {
     return <div className={'blocked-employee-card'}>
         <h3>{props.employee_full_name}</h3>
-        <Link
-            to={`https://dzb-web.rgs.ru/dib/search/data-search.php?mode=equal&type=cardid&field=${props.employee_id}`}>Ссылка
-            на профиль №{props.employee_id}</Link>
+        <a href={`https://dzb-web.rgs.ru/dib/search/data-search.php?mode=equal&type=cardid&field=${props.employee_id}`}>Ссылка
+            на профиль №{props.employee_id}</a>
         {
             props.system_accounts.length > 0 ? <table className={'system-accounts'}>
                 <thead>

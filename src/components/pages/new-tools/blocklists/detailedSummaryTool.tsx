@@ -10,14 +10,13 @@ import {
 import ToolFormResultTable from "../../../fragments/forms/fragments/viewers/toolFormResultTable";
 
 import ToolFormResultFiles from "../../../fragments/forms/fragments/viewers/toolFormResultFiles";
-import {BlockListsDetailedSummary} from "../../../../models/reports/blocklists/detailed-summary";
+import {BlockListsDetailedReport} from "../../../../models/reports/blocklists/detailed-summary";
 import moment from "moment";
 import {ToolFormDateField} from "../../../fragments/forms/fragments/fields/toolFormDateField";
-import ToolFormResultDiagram from "../../../fragments/forms/fragments/viewers/toolFormResultDiagram";
 import ToolFormResultLoading from "../../../fragments/forms/fragments/viewers/toolFormResultLoading";
 
 export function BlockListsDetailedSummaryTool() {
-    const [reportData, setReportData] = useState<BlockListsDetailedSummary>()
+    const [reportData, setReportData] = useState<BlockListsDetailedReport>()
 
     const today = moment()
     const [endDate, setEndDate] = useState<string>(today.toISOString().slice(0, 10))
@@ -54,7 +53,7 @@ export function BlockListsDetailedSummaryTool() {
             _startDate.set('hour', 0).set('minutes', 0)
             _endDate.set('hour', 23).set('minutes', 59)
 
-            BlockListsDetailedSummary.send(_startDate.toISOString(), _endDate.toISOString(), save).then(reportData => {
+            BlockListsDetailedReport.send(_startDate.toISOString(), _endDate.toISOString(), save).then(reportData => {
                 if (reportData) {
                     setReportData(reportData)
                     setIsLoaded(true)
@@ -98,11 +97,11 @@ export function BlockListsDetailedSummaryTool() {
             isRequested ? <Fragment>
                 {
                     isLoaded && reportData ?
-                        <ToolFormResultExtendedViewer isLoaded={isLoaded} summary={reportData?.GetSummary()}>
+                        <ToolFormResultExtendedViewer isLoaded={isLoaded} summary={reportData?.summary()}>
                             {reportData ? <Fragment>
-                                <ToolFormResultFiles name={'Файл отчета'} files={reportData.GetFiredFiles()}/>
+                                <ToolFormResultFiles name={'Файл отчета'} files={reportData.getFiles()}/>
                                 {/*<ToolFormResultDiagram diagram={reportData.Render()}/>*/}
-                                <ToolFormResultTable table={reportData.Render()}/>
+                                <ToolFormResultTable table={reportData.renderTable()}/>
                             </Fragment> : <Fragment></Fragment>}
                         </ToolFormResultExtendedViewer> : <ToolFormResultLoading/>
                 }

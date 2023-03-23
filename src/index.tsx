@@ -18,6 +18,7 @@ import {BlockListsRegularTool} from "./components/pages/new-tools/blocklists/reg
 import {SecurityBlockListTool} from "./components/pages/new-tools/blocklists/securityBlockListTool";
 import History from "./components/pages/history/history";
 import ToolsMenu from "./components/pages/new-tools/tools-menu/toolMenu";
+import ReportInfo from "./components/pages/report/reportInfo";
 
 const router = createBrowserRouter([
     {
@@ -34,7 +35,7 @@ const router = createBrowserRouter([
             },
             {
                 path: '/reports/:reportId',
-                element: <Fragment/>, // TODO
+                element: <ReportInfo/>,
             },
             {
                 path: '/tools-menu',

@@ -1,19 +1,19 @@
 import React, {Fragment, useEffect, useState} from "react";
-import {AgreementsDefaultSummary} from "../../../../models/reports/agreements/default-summary";
 import {ToolForm} from "../../../fragments/forms/toolForm";
 import ToolFormFieldGroup from "../../../fragments/forms/fragments/groups/toolFormFieldGroup";
 import ToolFormButtonGroup from "../../../fragments/forms/fragments/groups/toolFormButtonGroup";
 import {ToolFormCheckBoxField} from "../../../fragments/forms/fragments/fields/toolFormCheckBoxField";
 import {ToolFormErrorGroup} from "../../../fragments/forms/fragments/groups/toolFormErrorGroup";
 import ToolFormFileUploadField from "../../../fragments/forms/fragments/fields/toolFormFileUploadField";
-import ToolFormResultDiagram from "../../../fragments/forms/fragments/viewers/toolFormResultDiagram";
+import ToolFormResultChart from "../../../fragments/forms/fragments/viewers/toolFormResultChart";
 import {
     ToolFormResultExtendedViewer
 } from "../../../fragments/forms/fragments/viewers/toolFormResultViewer";
 import ToolFormResultLoading from "../../../fragments/forms/fragments/viewers/toolFormResultLoading";
+import {AgreementsDefaultReport} from "../../../../models/reports/agreements/default-summary";
 
 export function AgreementsDefaultSummaryTool() {
-    const [reportData, setReportData] = useState<AgreementsDefaultSummary>()
+    const [reportData, setReportData] = useState<AgreementsDefaultReport>()
 
     const [fileUpload, setFileUpload] = useState<File>()
     const [save, setSave] = useState<boolean>(true)
@@ -37,13 +37,13 @@ export function AgreementsDefaultSummaryTool() {
         setIsRequested(true)
 
         if (fileUpload !== undefined) {
-            AgreementsDefaultSummary.send(fileUpload, save).then(reportData => {
+            AgreementsDefaultReport.send(fileUpload, save).then(reportData => {
                 if (reportData) {
                     setReportData(reportData)
                     setIsLoaded(true)
                 }
             }).catch(error => {
-                console.error(error)
+                // console.error(error as ATLS)
             })
         }
 
@@ -80,9 +80,9 @@ export function AgreementsDefaultSummaryTool() {
             isRequested ? <Fragment>
                 {
                     isLoaded && reportData ?
-                        <ToolFormResultExtendedViewer isLoaded={isLoaded} summary={reportData?.Summary()}>
+                        <ToolFormResultExtendedViewer isLoaded={isLoaded} summary={reportData.summary()}>
                             <Fragment>
-                                <ToolFormResultDiagram diagram={reportData?.Render()}/>
+                                <ToolFormResultChart chart={reportData.renderChart()}/>
                             </Fragment>
                         </ToolFormResultExtendedViewer> : <ToolFormResultLoading/>
                 }

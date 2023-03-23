@@ -107,6 +107,10 @@
       //margin: 10px 5px;
       flex-basis: 32%;
 
+      a {
+        text-decoration: none;
+      }
+
       &.separator {
         flex-basis: 100%;
 
@@ -137,7 +141,7 @@
         transition: 0.25s ease-in-out;
 
         &:hover {
-          transform: scale(101%);
+          transform: scale(103%);
           cursor: pointer;
         }
 
@@ -174,6 +178,34 @@
               float: right;
             }
           }
+        }
+
+        &_agreements {
+          &-default {
+            border-left: 5px solid darkseagreen;
+          }
+
+          &-detailed {
+            border-left: 5px solid darkolivegreen;
+          }
+        }
+
+        &_blocks {
+          &-esd {
+            border-left: 5px solid firebrick;
+          }
+
+          &-regular {
+            border-left: 5px solid orange;
+          }
+
+          &-detailed {
+            border-left: 5px solid orangered;
+          }
+        }
+
+        &_none {
+          border-left: 5px solid #576162;
         }
       }
     }

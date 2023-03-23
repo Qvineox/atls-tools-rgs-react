@@ -28,9 +28,9 @@ export default function ToolFormResultFiles(props: IToolFormResultFilesProps) {
 function ResultFile(props: IToolResponseFile) {
     return (<div className={`file-info`}>
         <h2>{props.file_name}</h2>
-        <Link to={props.public_url}>Скачивание файла</Link>
+        <a href={process.env.REACT_APP_BACKEND_URL + props.public_url}>Скачивание файла</a>
         {
-            props.description?.includes("http") ? <Link to={props.description}>Доп. ссылка</Link> :
+            props.description?.includes("http") ? <a href={props.description}>Доп. ссылка</a> :
                 <p>{props.description}</p>
         }
 

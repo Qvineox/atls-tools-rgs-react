@@ -11,11 +11,11 @@ import {
 import ToolFormResultTable from "../../../fragments/forms/fragments/viewers/toolFormResultTable";
 
 import ToolFormResultFiles from "../../../fragments/forms/fragments/viewers/toolFormResultFiles";
-import {BlockListsDetailedSummary} from "../../../../models/reports/blocklists/detailed-summary";
 import ToolFormResultLoading from "../../../fragments/forms/fragments/viewers/toolFormResultLoading";
+import {BlockListsRegularReport} from "../../../../models/reports/blocklists/regular-blocklist";
 
 export function BlockListsRegularTool() {
-    const [reportData, setReportData] = useState<BlockListsDetailedSummary>()
+    const [reportData, setReportData] = useState<BlockListsRegularReport>()
 
     const [firedFile, setFiredFile] = useState<File>()
     const [decreeFile, setDecreeFile] = useState<File>()
@@ -45,7 +45,7 @@ export function BlockListsRegularTool() {
         setIsRequested(true)
 
         if (firedFile || decreeFile || domainFile) {
-            BlockListsDetailedSummary.sendBlocklist(firedFile, decreeFile, domainFile, save).then(reportData => {
+            BlockListsRegularReport.send(firedFile, decreeFile, domainFile, save).then(reportData => {
                 if (reportData) {
                     setReportData(reportData)
                     setIsLoaded(true)
@@ -93,11 +93,13 @@ export function BlockListsRegularTool() {
             isRequested ? <Fragment>
                 {
                     isLoaded && reportData ?
-                        <ToolFormResultExtendedViewer isLoaded={isLoaded} summary={reportData?.GetSummary()}>
+                        <ToolFormResultExtendedViewer isLoaded={isLoaded} summary={reportData?.summary()}>
                             {reportData ? <Fragment>
-                                <ToolFormResultFiles name={'Списки уволенных работников'} files={reportData.GetFiredFiles()}/>
-                                <ToolFormResultFiles name={'Списки работников в декрете'} files={reportData.GetDecreeFiles()}/>
-                                <ToolFormResultTable table={reportData.Render()}/>
+                                <ToolFormResultFiles name={'Списки уволенных работников'}
+                                                     files={reportData.getFilesFired()}/>
+                                <ToolFormResultFiles name={'Списки работников в декрете'}
+                                                     files={reportData.getFilesDecree()}/>
+                                <ToolFormResultTable table={reportData.renderTable()}/>
                             </Fragment> : <Fragment></Fragment>}
                         </ToolFormResultExtendedViewer> : <ToolFormResultLoading/>
                 }
