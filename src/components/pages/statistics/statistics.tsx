@@ -4,6 +4,7 @@ import moment from "moment";
 import ReactApexChart from "react-apexcharts";
 import "./statistics.scss"
 import axios from "axios";
+import ATLSError from "../../../models/error";
 
 
 interface IAgreementReportData {
@@ -62,6 +63,8 @@ export default function Statistics() {
                     agreement_reports: response.data as Array<IAgreementReportData>
                 }))
             }
+        }).catch(error => {
+            ATLSError.fromAxios(error).toast()
         })
     }, [])
 
@@ -179,6 +182,8 @@ export function AgreementChart({agreementsByDate}: IAgreementChartProps) {
                     }
                 },
             }))
+        }).catch(error => {
+            ATLSError.fromAxios(error).toast()
         })
     }, [agreementsByDate])
 
@@ -290,6 +295,8 @@ export function BlockChart({agreementsByDate}: IAgreementChartProps) {
                     }
                 },
             }))
+        }).catch(error => {
+            ATLSError.fromAxios(error).toast()
         })
     }, [agreementsByDate])
 

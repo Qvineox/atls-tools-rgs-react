@@ -6,6 +6,7 @@ import moment from "moment/moment";
 import ReportsList, {IReportCardProps} from "./reportsList";
 import axios from "axios";
 import loading from "./Pulse-0.9s-800px.gif";
+import ATLSError from "../../../models/error";
 
 export default function History() {
     const today = moment()
@@ -59,6 +60,8 @@ export default function History() {
                     setReportsList([])
                 }
                 setIsLoaded(true)
+            }).catch(error => {
+                ATLSError.fromAxios(error).toast()
             })
         }
     }, [queryFilter])

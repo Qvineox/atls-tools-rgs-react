@@ -2,6 +2,7 @@ import React, {Fragment, useEffect, useState} from "react";
 import moment, {Moment} from "moment";
 import '../../../../styles/pages/tools.scss'
 import axios from "axios";
+import ATLSError from "../../../../models/error";
 
 interface IForeignCompany {
     company_name: string
@@ -55,6 +56,8 @@ export default function AddForeignEmployeesTool() {
 
                 setEmployeeList(responseData)
             }
+        }).catch(error => {
+            ATLSError.fromAxios(error).toast()
         })
     }
 

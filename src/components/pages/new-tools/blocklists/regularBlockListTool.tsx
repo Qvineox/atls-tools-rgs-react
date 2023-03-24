@@ -13,6 +13,7 @@ import ToolFormResultTable from "../../../fragments/forms/fragments/viewers/tool
 import ToolFormResultFiles from "../../../fragments/forms/fragments/viewers/toolFormResultFiles";
 import ToolFormResultLoading from "../../../fragments/forms/fragments/viewers/toolFormResultLoading";
 import {BlockListsRegularReport} from "../../../../models/reports/blocklists/regular-blocklist";
+import ATLSError from "../../../../models/error";
 
 export function BlockListsRegularTool() {
     const [reportData, setReportData] = useState<BlockListsRegularReport>()
@@ -51,7 +52,7 @@ export function BlockListsRegularTool() {
                     setIsLoaded(true)
                 }
             }).catch(error => {
-                console.error(error)
+                ATLSError.fromAxios(error).toast()
             })
         }
 

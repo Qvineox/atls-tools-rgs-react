@@ -13,6 +13,7 @@ import ToolFormResultChart from "../../fragments/forms/fragments/viewers/toolFor
 import {ToolFormResultViewer} from "../../fragments/forms/fragments/viewers/toolFormResultViewer";
 import ToolFormResultLoading from "../../fragments/forms/fragments/viewers/toolFormResultLoading";
 import moment from "moment";
+import ATLSError from "../../../models/error";
 
 interface IReportInfo {
     id: number
@@ -73,8 +74,9 @@ export default function ReportInfo() {
             }
 
             setIsLoaded(true)
+        }).catch(error => {
+            ATLSError.fromAxios(error).toast()
         })
-
     }, [params.reportId])
 
     return (<div className={'report-body'}>

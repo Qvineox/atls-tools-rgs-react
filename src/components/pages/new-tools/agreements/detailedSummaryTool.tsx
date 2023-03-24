@@ -13,6 +13,7 @@ import ToolFormResultTable from "../../../fragments/forms/fragments/viewers/tool
 
 import ToolFormResultFiles from "../../../fragments/forms/fragments/viewers/toolFormResultFiles";
 import ToolFormResultLoading from "../../../fragments/forms/fragments/viewers/toolFormResultLoading";
+import ATLSError from "../../../../models/error";
 
 export function AgreementsDetailedSummaryTool() {
     const [reportData, setReportData] = useState<AgreementsDetailedReport>()
@@ -43,7 +44,7 @@ export function AgreementsDetailedSummaryTool() {
                     setIsLoaded(true)
                 }
             }).catch(error => {
-                console.error(error)
+                ATLSError.fromAxios(error).toast()
             })
         }
     }

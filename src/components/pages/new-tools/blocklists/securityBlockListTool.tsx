@@ -11,6 +11,7 @@ import BlockListSecurityReport from "../../../../models/reports/blocklists/secur
 import {ToolFormTextField} from "../../../fragments/forms/fragments/fields/toolFormTextField";
 import {ToolFormTextAreaField} from "../../../fragments/forms/fragments/fields/toolFormTextAreaField";
 import ToolFormResultLoading from "../../../fragments/forms/fragments/viewers/toolFormResultLoading";
+import ATLSError from "../../../../models/error";
 
 export function SecurityBlockListTool() {
     const [reportData, setReportData] = useState<BlockListSecurityReport>()
@@ -70,7 +71,7 @@ export function SecurityBlockListTool() {
                     setIsLoaded(true)
                 }
             }).catch(error => {
-                console.error(error)
+                ATLSError.fromAxios(error).toast()
             })
         }
     }

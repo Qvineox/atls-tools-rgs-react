@@ -14,6 +14,7 @@ import {BlockListsDetailedReport} from "../../../../models/reports/blocklists/de
 import moment from "moment";
 import {ToolFormDateField} from "../../../fragments/forms/fragments/fields/toolFormDateField";
 import ToolFormResultLoading from "../../../fragments/forms/fragments/viewers/toolFormResultLoading";
+import ATLSError from "../../../../models/error";
 
 export function BlockListsDetailedSummaryTool() {
     const [reportData, setReportData] = useState<BlockListsDetailedReport>()
@@ -59,7 +60,7 @@ export function BlockListsDetailedSummaryTool() {
                     setIsLoaded(true)
                 }
             }).catch(error => {
-                console.error(error)
+                ATLSError.fromAxios(error).toast()
             })
         }
 
