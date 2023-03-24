@@ -21,7 +21,6 @@ export interface ISearchBarProps {
     queryFilter: IReportsQuery;
     setQueryFilter: React.Dispatch<React.SetStateAction<IReportsQuery>>
 }
-
 export default function SearchBar(props: ISearchBarProps) {
     return (
         <div id={'search-bar'}>

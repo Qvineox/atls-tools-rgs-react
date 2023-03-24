@@ -7,6 +7,7 @@ import ReportsList, {IReportCardProps} from "./reportsList";
 import axios from "axios";
 import loading from "./Pulse-0.9s-800px.gif";
 import ATLSError from "../../../models/error";
+import {toast} from "react-toastify";
 
 export default function History() {
     const today = moment()
@@ -29,7 +30,8 @@ export default function History() {
         let _endDate = moment(queryFilter.endDate)
 
         if (_endDate < _startDate) {
-            console.error('Неправильный формат даты')
+            toast.error("Неправильно выбран диапазон.")
+
             document.getElementById('start-date')?.classList.add('error')
             document.getElementById('end-date')?.classList.add('error')
             return
@@ -74,7 +76,7 @@ export default function History() {
                     {
                         isLoaded && reportsList ? <ReportsList reports={reportsList}/> :
                             <div className={'report-list-loading'}>
-                                <img src={loading} className={'loading-svg'}/>
+                                <img alt={'loading...'} src={loading} className={'loading-svg'}/>
                             </div>
                     }
                 </Fragment> : <Fragment/>

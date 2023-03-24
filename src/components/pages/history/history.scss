@@ -11,79 +11,6 @@
 
   gap: 0 1vw;
 
-  #search-bar {
-    display: flex;
-    flex-direction: row;
-
-    justify-content: center;
-    align-items: center;
-
-    align-self: center;
-
-    width: 95vw;
-    min-height: 4rem;
-    height: 5vh;
-    padding: 25px 0 20px 0;
-
-    border-bottom: 2px solid #dadada;
-
-    .input-field {
-      display: flex;
-      flex-direction: column;
-
-      justify-content: center;
-
-      padding: 0 20px 0 20px;
-      margin-bottom: 10px;
-
-      height: 6vh;
-    }
-
-    .input-field label {
-      margin-bottom: 4px;
-    }
-
-    .input-field input {
-      height: 30px;
-      width: 15vw;
-      min-width: 200px;
-      min-height: 1.5rem;
-
-      border-radius: 2px;
-      border: 1px solid $color-gunmetal;
-
-      padding: 2px 5px;
-      font-size: 0.9rem;
-
-      &.error {
-        border: 1px solid firebrick;
-        background-color: lightpink;
-      }
-    }
-
-    .input-field button {
-      width: 100%;
-      height: 4vh;
-
-      margin-bottom: 4px;
-
-      font-size: 1rem;
-
-
-      border-radius: 5px;
-      border: 1px solid $color-gunmetal;
-
-      &:hover {
-        background-color: $color-blue-slate;
-        cursor: pointer;
-      }
-    }
-
-    #report-types-select {
-      width: 100%;
-    }
-  }
-
   p.placeholder {
     font-size: 1.5rem;
   }
@@ -219,5 +146,78 @@
 
     width: 90vw;
     height: 70vh;
+  }
+}
+
+#search-bar {
+  display: flex;
+  flex-direction: row;
+
+  justify-content: center;
+  align-items: center;
+
+  align-self: center;
+
+  width: 95vw;
+  min-height: 4rem;
+  height: 5vh;
+  padding: 25px 0 20px 0;
+
+  border-bottom: 2px solid #dadada;
+
+  .input-field {
+    display: flex;
+    flex-direction: column;
+
+    justify-content: center;
+
+    padding: 0 20px 0 20px;
+    margin-bottom: 10px;
+
+    height: 6vh;
+  }
+
+  .input-field label {
+    margin-bottom: 4px;
+  }
+
+  .input-field input {
+    height: 30px;
+    width: 15vw;
+    min-width: 200px;
+    min-height: 1.5rem;
+
+    border-radius: 2px;
+    border: 1px solid $color-gunmetal;
+
+    padding: 2px 5px;
+    font-size: 0.9rem;
+
+    &.error {
+      border: 1px solid firebrick;
+      background-color: lightpink;
+    }
+  }
+
+  .input-field button {
+    width: 100%;
+    height: 4vh;
+
+    margin-bottom: 4px;
+
+    font-size: 1rem;
+
+
+    border-radius: 5px;
+    border: 1px solid $color-gunmetal;
+
+    &:hover {
+      background-color: $color-blue-slate;
+      cursor: pointer;
+    }
+  }
+
+  #report-types-select {
+    width: 100%;
   }
 }

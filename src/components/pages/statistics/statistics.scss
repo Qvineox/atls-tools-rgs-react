@@ -1,18 +1,33 @@
-.statistics-panel {
+.statistics-body {
+  width: 92vw;
+  padding: 2vh 4vw;
+
   display: flex;
   flex-direction: column;
+  justify-content: start;
+  align-items: center;
 
-  align-items: flex-start;
-  justify-content: flex-start;
+  gap: 2vh 0;
 
-  padding: 2vh 0 5vh 0;
+  #filter-bar {
+    display: flex;
+    flex-direction: row;
 
-  gap: 4vh 0;
+    justify-content: center;
+    align-items: center;
 
-  width: 90vw;
+    align-self: center;
+
+    width: 95vw;
+    min-height: 4rem;
+    height: 5vh;
+    padding: 25px 0 20px 0;
+
+    border-bottom: 2px solid #dadada;
+  }
 }
 
-.statistics_agreements {
+.chart {
   background-color: #d6d9de;
   box-shadow: 4px 4px 4px 0 rgb(34 60 80 / 20%);
 
@@ -25,6 +40,14 @@
     border-bottom: 2px solid #282c34;
 
     width: 25%;
+  }
+
+  &_agreements {
+
+  }
+
+  &:last-child {
+    margin-bottom: 10vh;
   }
 }
 
