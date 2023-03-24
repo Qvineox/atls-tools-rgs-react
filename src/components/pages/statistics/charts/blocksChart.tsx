@@ -1,10 +1,10 @@
 import {ApexOptions} from "apexcharts";
-import React, {useEffect, useState} from "react";
+import React, {Fragment, useEffect, useState} from "react";
 import moment from "moment/moment";
 import axios from "axios";
 import ATLSError from "../../../../models/error";
 import ReactApexChart from "react-apexcharts";
-import {toast} from "react-toastify";
+import ToolFormResultLoading from "../../../fragments/forms/fragments/viewers/toolFormResultLoading";
 
 const firedColor = '#fb7100'
 const decreeColor = '#ffc026'
@@ -64,20 +64,17 @@ interface IBlocksChartProps {
 export default function BlocksChart(props: IBlocksChartProps) {
     let [chartSeriesData, setChartSeriesData] = useState<ApexAxisChartSeries>([])
 
+    const [isLoaded, setIsLoaded] = useState<boolean>(false)
+    const [isRequested, setIsRequested] = useState<boolean>(false)
+
     useEffect(() => {
+        setIsRequested(true)
+        setIsLoaded(false)
+
         let _startDate = moment(props.startDate)
         let _endDate = moment(props.endDate)
 
-        if (_endDate < _startDate) {
-            toast.error("Неправильно выбран диапазон.")
-
-            document.getElementById('start-date')?.classList.add('error')
-            document.getElementById('end-date')?.classList.add('error')
-            return
-        } else {
-            document.getElementById('start-date')?.classList.remove('error')
-            document.getElementById('end-date')?.classList.remove('error')
-
+        if (_endDate >= _startDate) {
             _startDate.set('hour', 0).set('minutes', 0)
             _endDate.set('hour', 23).set('minutes', 59)
 
@@ -92,32 +89,36 @@ export default function BlocksChart(props: IBlocksChartProps) {
                 let pointsSecurityBlocked: Array<{ x: Date, y: number }> = []
 
                 let stats = response.data as Array<IRegularBlockReportData>
-
-                stats.forEach((item) => {
-                    pointsFiredBlocked.push({x: item.created_at, y: item.fired_accounts_blocked})
-                    pointsDecreeBlocked.push({x: item.created_at, y: item.decree_accounts_blocked})
-                    pointsSecurityBlocked.push({
-                        x: item.created_at,
-                        y: item.total_system_accounts_blocked + item.total_domain_accounts_blocked
+                if (stats && stats.length > 0) {
+                    stats.forEach((item) => {
+                        pointsFiredBlocked.push({x: item.created_at, y: item.fired_accounts_blocked})
+                        pointsDecreeBlocked.push({x: item.created_at, y: item.decree_accounts_blocked})
+                        pointsSecurityBlocked.push({
+                            x: item.created_at,
+                            y: item.total_system_accounts_blocked + item.total_domain_accounts_blocked
+                        })
                     })
-                })
 
-                setChartSeriesData([{
-                    type: 'area',
-                    color: firedColor,
-                    name: 'Увольнения',
-                    data: pointsFiredBlocked
-                }, {
-                    type: 'area',
-                    color: decreeColor,
-                    name: 'Сотрудники в декрете',
-                    data: pointsDecreeBlocked
-                }, {
-                    type: 'area',
-                    color: securityColor,
-                    name: 'Нарушения ДЭБ',
-                    data: pointsSecurityBlocked
-                }])
+                    setChartSeriesData([{
+                        type: 'area',
+                        color: firedColor,
+                        name: 'Увольнения',
+                        data: pointsFiredBlocked
+                    }, {
+                        type: 'area',
+                        color: decreeColor,
+                        name: 'Сотрудники в декрете',
+                        data: pointsDecreeBlocked
+                    }, {
+                        type: 'area',
+                        color: securityColor,
+                        name: 'Нарушения ДЭБ',
+                        data: pointsSecurityBlocked
+                    }])
+                }
+
+
+                setIsLoaded(true)
             }).catch(error => {
                 ATLSError.fromAxios(error).toast()
             })
@@ -125,11 +126,23 @@ export default function BlocksChart(props: IBlocksChartProps) {
     }, [props])
 
     return (
-        <div className="chart chart_agreements">
-            <h2>Блокировки учетных записей</h2>
-            <ReactApexChart height={'600px'} type={'line'}
-                            series={chartSeriesData}
-                            options={chartOptions}/>
-        </div>
+        <Fragment>
+            {
+                isRequested ? <Fragment>
+                    {
+                        isLoaded && chartSeriesData ? <Fragment>
+                            <div className="chart chart_agreements">
+                                <h2>Блокировки учетных записей</h2>
+                                <ReactApexChart height={'600px'} type={'line'}
+                                                series={chartSeriesData}
+                                                options={chartOptions}/>
+                            </div>
+                        </Fragment> : <ToolFormResultLoading/>
+                    }
+                </Fragment> : <Fragment/>
+            }
+        </Fragment>
+
+
     )
 }

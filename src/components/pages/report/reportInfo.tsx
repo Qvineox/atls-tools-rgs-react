@@ -2,7 +2,7 @@ import "./report.scss"
 import {Fragment, useEffect, useState} from "react";
 import {Report} from "../../../models/reports/reports";
 import axios from "axios";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {AgreementsDefaultReport} from "../../../models/reports/agreements/default-summary";
 import {AgreementsDetailedReport} from "../../../models/reports/agreements/detailed-summary";
 import {BlockListsRegularReport} from "../../../models/reports/blocklists/regular-blocklist";
@@ -26,7 +26,8 @@ interface IReportInfo {
 }
 
 export default function ReportInfo() {
-    let params = useParams();
+    const params = useParams();
+    const navigate = useNavigate();
 
     const [reportInfo, setReportInfo] = useState<IReportInfo>()
     const [reportData, setReportData] = useState<Report>()
@@ -112,9 +113,20 @@ export default function ReportInfo() {
                     </table>
                 </div>
                 {
-                    isLoaded && reportData ? <div className={'summary'}>
-                        {reportData?.summary()}
-                    </div> : <Fragment/>
+                    isLoaded && reportData ? <Fragment>
+                        <div className={'summary'}>
+                            {reportData?.summary()}
+                        </div>
+                        <div className="options">
+                            <button onClick={() => {
+                                if (window.confirm(`Удалить отчет №${reportData?.report_id}?`)) {
+                                    reportData.delete()
+                                    navigate("/history");
+                                }
+                            }}>Удалить отчет
+                            </button>
+                        </div>
+                    </Fragment> : <Fragment/>
                 }
             </div> : <Fragment/>
         }

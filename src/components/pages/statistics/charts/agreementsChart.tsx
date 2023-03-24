@@ -1,10 +1,10 @@
 import {ApexOptions} from "apexcharts";
-import React, {useEffect, useState} from "react";
+import React, {Fragment, useEffect, useState} from "react";
 import moment from "moment/moment";
 import axios from "axios";
 import ATLSError from "../../../../models/error";
 import ReactApexChart from "react-apexcharts";
-import {toast} from "react-toastify";
+import ToolFormResultLoading from "../../../fragments/forms/fragments/viewers/toolFormResultLoading";
 
 const allowedColor = '#3a8300'
 const deniedColor = '#ff3c31'
@@ -61,20 +61,17 @@ interface IAgreementsChartProps {
 export default function AgreementsChart(props: IAgreementsChartProps) {
     let [chartSeriesData, setChartSeriesData] = useState<ApexAxisChartSeries>([])
 
+    const [isLoaded, setIsLoaded] = useState<boolean>(false)
+    const [isRequested, setIsRequested] = useState<boolean>(false)
+
     useEffect(() => {
+        setIsRequested(true)
+        setIsLoaded(false)
+
         let _startDate = moment(props.startDate)
         let _endDate = moment(props.endDate)
 
-        if (_endDate < _startDate) {
-            toast.error("Неправильно выбран диапазон.")
-
-            document.getElementById('start-date')?.classList.add('error')
-            document.getElementById('end-date')?.classList.add('error')
-            return
-        } else {
-            document.getElementById('start-date')?.classList.remove('error')
-            document.getElementById('end-date')?.classList.remove('error')
-
+        if (_endDate >= _startDate) {
             _startDate.set('hour', 0).set('minutes', 0)
             _endDate.set('hour', 23).set('minutes', 59)
 
@@ -89,36 +86,48 @@ export default function AgreementsChart(props: IAgreementsChartProps) {
 
                 let stats = response.data as Array<IAgreementsReportData>
 
-                stats.forEach((item) => {
-                    pointsAllowed.push({x: item.created_at, y: item.allowed})
-                    pointsDenied.push({x: item.created_at, y: item.denied})
-                })
+                if (stats && stats.length > 0) {
+                    stats.forEach((item) => {
+                        pointsAllowed.push({x: item.created_at, y: item.allowed})
+                        pointsDenied.push({x: item.created_at, y: item.denied})
+                    })
 
-                setChartSeriesData([{
-                    type: 'area',
-                    color: allowedColor,
-                    name: 'Согласовано',
-                    data: pointsAllowed
-                }, {
-                    type: 'area',
-                    color: deniedColor,
-                    name: 'Отклонено',
-                    data: pointsDenied
-                }])
+                    setChartSeriesData([{
+                        type: 'area',
+                        color: allowedColor,
+                        name: 'Согласовано',
+                        data: pointsAllowed
+                    }, {
+                        type: 'area',
+                        color: deniedColor,
+                        name: 'Отклонено',
+                        data: pointsDenied
+                    }])
+                }
+
+                setIsLoaded(true)
             }).catch(error => {
                 ATLSError.fromAxios(error).toast()
             })
         }
-
-
     }, [props])
 
     return (
-        <div className="chart chart_agreements">
-            <h2>Согласования</h2>
-            <ReactApexChart height={'600px'} type={'line'}
-                            series={chartSeriesData}
-                            options={chartOptions}/>
-        </div>
+        <Fragment>
+            {
+                isRequested ? <Fragment>
+                    {
+                        isLoaded && chartSeriesData ? <Fragment>
+                            <div className="chart chart_agreements">
+                                <h2>Согласования</h2>
+                                <ReactApexChart height={'600px'} type={'line'}
+                                                series={chartSeriesData}
+                                                options={chartOptions}/>
+                            </div>
+                        </Fragment> : <ToolFormResultLoading/>
+                    }
+                </Fragment> : <Fragment/>
+            }
+        </Fragment>
     )
 }

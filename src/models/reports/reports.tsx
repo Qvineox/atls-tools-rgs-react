@@ -1,4 +1,7 @@
 import {ReactNode} from "react";
+import axios from "axios";
+import ATLSError from "../error";
+import {toast} from "react-toastify";
 
 export class ToolResponse {
     report_id: number
@@ -48,6 +51,20 @@ export abstract class Report {
 
     getFiles(): Array<IToolResponseFile> {
         return this.files
+    }
+
+    delete(): void {
+        axios({
+            method: 'DELETE',
+            url: process.env.REACT_APP_BACKEND_URL + "/api/reporting/report",
+            params: {
+                'id': this.report_id
+            }
+        }).then(() => {
+            toast.success(`Отчет №${this.report_id} удален.`)
+        }).catch(error => {
+            ATLSError.fromAxios(error).toast()
+        })
     }
 }
 

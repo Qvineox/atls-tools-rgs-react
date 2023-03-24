@@ -34,7 +34,6 @@ export default function History() {
 
             document.getElementById('start-date')?.classList.add('error')
             document.getElementById('end-date')?.classList.add('error')
-            return
         } else {
             document.getElementById('start-date')?.classList.remove('error')
             document.getElementById('end-date')?.classList.remove('error')

@@ -1,4 +1,5 @@
-import React from "react";
+import React, {useEffect} from "react";
+import {toast} from "react-toastify";
 
 export interface ISearchBarProps {
     startDate: string
@@ -8,6 +9,18 @@ export interface ISearchBarProps {
 }
 
 export default function SearchBar(props: ISearchBarProps) {
+    useEffect(() => {
+        if (props.startDate >= props.endDate) {
+            toast.error("Неправильно выбран диапазон.")
+
+            document.getElementById('start-date')?.classList.add('error')
+            document.getElementById('end-date')?.classList.add('error')
+        } else {
+            document.getElementById('start-date')?.classList.remove('error')
+            document.getElementById('end-date')?.classList.remove('error')
+        }
+    }, [props.startDate, props.endDate])
+
     return (
         <div id={'search-bar'}>
             <div className="input-field">
