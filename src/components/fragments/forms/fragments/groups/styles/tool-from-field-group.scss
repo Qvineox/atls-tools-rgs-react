@@ -1,7 +1,9 @@
-.tool-form-field-group {
-  background-color: #d6d9de;
+@import "/src/styles/colors";
 
-  box-shadow: 4px 4px 4px 0 rgb(34 60 80 / 20%);
+.tool-form-field-group {
+  background-color: $color-block;
+
+  box-shadow: $default-shadow;
   display: flex;
   flex-direction: column;
 
@@ -11,4 +13,6 @@
   user-select: none;
 
   width: 100%;
+
+  border-radius: 4px;
 }

@@ -1,4 +1,4 @@
-import {IEmployeeCardPreview} from "../../models/employeeCard";
+import {IEmployeeCardPreview} from "../../models/employees/employeeCard";
 import React, {Fragment, useEffect, useState} from "react";
 
 interface IEmployeeCardPreviewProps {
@@ -16,7 +16,7 @@ export function EmployeeCardPreview(employee: IEmployeeCardPreviewProps) {
 
         setCardData(employee.data.display_unit.split(";"))
         setIsCorrectCount(employee.data.active_assignments_count === employee.data.foreign_assignments_count + employee.data.non_state_assignments_count + employee.data.state_assignments_count)
-    }, [employee.data.active_assignments_count, employee.data.foreign_assignments_count, employee.data.non_state_assignments_count, employee.data.state_assignments_count])
+    }, [employee.data.active_assignments_count, employee.data.display_unit, employee.data.foreign_assignments_count, employee.data.non_state_assignments_count, employee.data.state_assignments_count])
 
 
     return <Fragment>

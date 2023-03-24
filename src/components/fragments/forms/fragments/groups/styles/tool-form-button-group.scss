@@ -1,7 +1,9 @@
-.tool-form-button-group {
-  background-color: #d6d9de;
+@import "/src/styles/colors";
 
-  box-shadow: 4px 4px 4px 0 rgb(34 60 80 / 20%);
+.tool-form-button-group {
+  background-color: $color-block;
+
+  box-shadow: $default-shadow;
   display: flex;
   flex-direction: row;
 
@@ -15,21 +17,22 @@
   padding: 10px;
 
   height: 3vh;
+  border-radius: 4px;
 
   button {
     border-radius: 4px;
-    border: 1px solid #282c34;
+    border: 1px solid $color-border;
 
     min-height: 1.5rem;
     height: 2.5vh;
     width: 7vw;
 
     &.reset {
-      background-color: rgba(232, 224, 172, 0.75);
+      background-color: $color-warning;
     }
 
     &.execute {
-      background-color: rgba(179, 234, 161, 0.75);
+      background-color: $color-success;
     }
 
     transition: ease-in-out .25s;

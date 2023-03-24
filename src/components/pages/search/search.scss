@@ -1,4 +1,4 @@
-@import '../../../styles/index';
+@import '../../../styles/colors';
 
 #search-panel {
   width: 96vw;
@@ -14,8 +14,8 @@
 form#employee-search {
   width: 26%;
   min-height: 400px;
-  background-color: $color-blue-slate;
-  box-shadow: 4px 4px 4px 0 rgba(34, 60, 80, 0.2);
+  background-color: $color-accent;
+  box-shadow: $default-shadow;
 
   display: flex;
   flex-direction: column;
@@ -34,18 +34,18 @@ form#employee-search {
   }
 
   input, select {
-    border: 1px solid $color-cadet;
+    border: 1px solid $color-accent;
     height: 3vh;
     padding: 2px 5px;
     border-radius: 4px;
 
     font-size: 0.9rem;
 
-    background-color: whitesmoke;
+    background-color: $color-background;
   }
 
   button {
-    border: 1px solid $color-cadet;
+    border: 1px solid $color-border;
     height: 3vh;
     border-radius: 4px;
     width: 25%;
@@ -64,23 +64,11 @@ form#employee-search {
   }
 }
 
-.loading-area {
-  width: 73%;
-  height: 100%;
-
-  background-color: #282c34;
-}
-
 .employee-search-result {
   width: 73%;
 
   display: flex;
   flex-direction: column;
-
-  p.hint {
-    color: #576162;
-    margin: 20px 0 0 20px;
-  }
 
   #found-employees-container {
     min-height: 140px;
@@ -92,7 +80,7 @@ form#employee-search {
     gap: 0 10px;
 
     padding-bottom: 35px;
-    border-bottom: 2px solid rgba(87, 97, 98, 0.26);
+    border-bottom: 2px solid $color-border;
 
     overflow-x: auto;
     overflow-y: hidden;
@@ -120,8 +108,8 @@ form#employee-search {
 
         width: 25%;
 
-        color: $color-gunmetal;
-        border-bottom: 2px solid #576162;
+        color: $color-text;
+        border-bottom: 2px solid $color-border;
       }
     }
 
@@ -131,7 +119,7 @@ form#employee-search {
 
       font-weight: lighter;
       font-size: 0.85rem;
-      color: #76889A;
+      color: $color-text;
     }
 
     .main-info {
@@ -140,7 +128,7 @@ form#employee-search {
 
         span#previous-name {
           font-size: 1.25rem;
-          color: #282c34;
+          color: $color-border;
           opacity: 0.5;
 
           margin: -5px 0 5px 0;
@@ -166,7 +154,7 @@ form#employee-search {
 
         height: 100%;
 
-        box-shadow: 2px 2px 2px 0 rgba(34, 60, 80, 0.2);
+        box-shadow: $default-shadow;
 
         .identity {
           display: flex;
@@ -201,7 +189,7 @@ form#employee-search {
 
         height: 15vh;
 
-        box-shadow: 2px 2px 2px 0 rgba(34, 60, 80, 0.2);
+        box-shadow: $default-shadow;
 
         a, span {
           display: block;
@@ -243,8 +231,8 @@ form#employee-search {
 
           margin-bottom: 10px;
 
-          background-color: $color-blue-slate;
-          box-shadow: 2px 2px 2px 0 rgba(34, 60, 80, 0.2);
+          background-color: $color-accent;
+          box-shadow: $default-shadow;
 
           .left-side, .right-side {
             display: flex;
@@ -296,7 +284,7 @@ form#employee-search {
             font-size: 0.9rem;
             white-space: pre-line;
 
-            border-left: 2px solid #576162;
+            border-left: 2px solid $color-border;
           }
 
           p:last-child {
@@ -314,7 +302,7 @@ form#employee-search {
       width: 100%;
       padding: 5px 0 10px 15px;
 
-      background-color: $color-blue-slate;
+      background-color: $color-accent;
     }
   }
 

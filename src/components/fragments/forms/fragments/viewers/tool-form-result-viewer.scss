@@ -1,4 +1,4 @@
-$color-accent: #d1dcec;
+@import "/src/styles/colors";
 
 .tool-form-result-viewer {
   flex-basis: 70%;
@@ -24,8 +24,8 @@ $color-accent: #d1dcec;
 .tool-form-result {
   width: 100%;
 
-  background-color: #d6d9de;
-  box-shadow: 4px 4px 4px 0 rgba(34, 60, 80, 0.2);
+  background-color: $color-block;
+  box-shadow: $default-shadow;
 
   h2 {
     margin: 10px 20px;
@@ -102,7 +102,7 @@ $color-accent: #d1dcec;
 
 
       table, tr, td {
-        border: 2px solid #4c4d4f;
+        border: 2px solid $color-border;
         border-collapse: collapse;
       }
     }
@@ -142,9 +142,9 @@ $color-accent: #d1dcec;
         flex-basis: 32%;
         //flex-grow: 0.5;
 
-        background-color: #d1dcec;
-        box-shadow: 4px 4px 4px 0 rgba(34, 60, 80, 0.2);
-        border: 1px solid #4c4d4f;
+        background-color: $color-accent;
+        box-shadow: 4px 4px 4px 0 $default-shadow;
+        border: 1px solid $color-border;
 
         display: flex;
         flex-direction: column;
@@ -152,7 +152,7 @@ $color-accent: #d1dcec;
         h2 {
           width: 90%;
           margin: 5px 0 5px 5%;
-          border-bottom: 2px solid #282c34;
+          border-bottom: 2px solid $color-border;
 
           font-size: 1.2rem;
 
@@ -197,8 +197,8 @@ $color-accent: #d1dcec;
     min-height: 30vh;
     min-width: 10vw;
 
-    background-color: #d6d9de;
-    box-shadow: 4px 4px 4px 0 rgba(34, 60, 80, 0.2);
+    background-color: $color-block;
+    box-shadow: 4px 4px 4px 0 $color-border;
 
     h2, p {
       margin: 10px 20px;
@@ -234,11 +234,11 @@ $color-accent: #d1dcec;
   table {
     &.system-accounts {
       td.highlighted {
-        background-color: #efb875;
+        background-color: $color-warning;
       }
 
       td.danger {
-        background-color: #ff6961;
+        background-color: $color-danger;
       }
 
       td.hidden {
@@ -272,11 +272,11 @@ $color-accent: #d1dcec;
 
     &.domain-accounts {
       td.highlighted {
-        background-color: #efb875;
+        background-color: $color-warning;
       }
 
       td.danger {
-        background-color: #ff6961;
+        background-color: $color-danger;
       }
 
       td.hidden {

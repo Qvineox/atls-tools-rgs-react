@@ -1,12 +1,12 @@
+@import "/src/styles/colors";
+
 .tool-form-parameter {
-  background-color: #d6d9de;
+  background-color: $color-block;
 
   min-height: 3vh;
 
   padding: 2px 5px;
   font-size: 1rem;
-
-  border-radius: 2px;
 
   display: flex;
 
@@ -16,7 +16,7 @@
   }
 
   &_text-field {
-    background-color: whitesmoke;
+    background-color: $color-input;
     margin: 0 10px 0 10px;
 
     min-height: 2vh;
@@ -45,7 +45,7 @@
     }
 
     input {
-      background-color: #d6d9de;
+      background-color: $color-block;
     }
   }
 
@@ -58,7 +58,7 @@
       padding: 2px 5px;
       min-width: 55%;
 
-      border: 1px solid #282c34;
+      border: 1px solid $color-border;
     }
   }
 
@@ -76,13 +76,13 @@
     margin-left: 0;
 
     flex-direction: column;
-    background-color: #d6d9de;
+    background-color: $color-input;
 
     input {
       margin: 2px 0 0 10px;
       padding: 2px 5px;
-      background-color: whitesmoke;
-      border: 1px solid #282c34;
+      background-color: $color-input;
+      border: 1px solid $color-border;
     }
   }
 

@@ -1,10 +1,12 @@
+@import "/src/styles/colors";
+
 #navigation-bar {
   width: 100%;
   min-height: 20px;
   height: 2vh;
 
-  background-color: #76889A;
-  border-bottom: 1px solid #dadada;
+  background-color: $color-main;
+  border-bottom: 1px solid $color-accent;
   box-shadow: 3px 8px 9px -6px rgba(34, 60, 80, 0.12);
 
   padding: 20px 0 20px 1.8vw;
@@ -28,7 +30,7 @@ nav {
 .navigation-bar__link, .navigation-bar__link_active {
   margin: 0 1vw 1vw 1vw;
   text-decoration: none;
-  color: #282C34;
+  color: $color-text;
   font-size: 1.1rem;
 
   padding: 0 10px 0 10px;

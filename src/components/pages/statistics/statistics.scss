@@ -1,3 +1,5 @@
+@import '/src/styles/colors';
+
 .statistics-body {
   width: 92vw;
   padding: 2vh 4vw;
@@ -23,13 +25,13 @@
     height: 5vh;
     padding: 25px 0 20px 0;
 
-    border-bottom: 2px solid #dadada;
+    border-bottom: 2px solid $color-border;
   }
 }
 
 .chart {
-  background-color: #d6d9de;
-  box-shadow: 4px 4px 4px 0 rgb(34 60 80 / 20%);
+  background-color: $color-block;
+  box-shadow: $default-shadow;
 
   padding: 5px 10px 10px 15px;
 
@@ -37,7 +39,7 @@
 
   h2 {
     margin: 10px 0 5px 10px;
-    border-bottom: 2px solid #282c34;
+    border-bottom: 2px solid $color-border;
 
     width: 25%;
   }

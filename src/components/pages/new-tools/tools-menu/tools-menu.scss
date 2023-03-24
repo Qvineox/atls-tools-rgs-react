@@ -1,3 +1,5 @@
+@import "/src/styles/colors";
+
 .tools-menu-body {
   padding: 7vh 5vw;
 
@@ -14,7 +16,7 @@
     flex-basis: 30%;
     padding: 10px 20px;
 
-    border: 2px solid #282c34;
+    border: 2px solid $color-border;
 
     &_header {
       display: flex;
@@ -24,7 +26,7 @@
       justify-content: space-between;
 
       h2 {
-        color: #282c34;
+        color: $color-text;
         margin: 0;
 
         font-size: 1.5rem;
@@ -77,8 +79,8 @@
         min-height: 50px;
         padding: 5px 0 20px 10px;
 
-        background-color: #d6d9de;
-        box-shadow: 4px 4px 4px 0 rgba(34, 60, 80, 0.2);
+        background-color: $color-block;
+        box-shadow: $default-shadow;
 
         transform: scale(0.97);
 
@@ -87,7 +89,7 @@
         }
 
         h2 {
-          color: #282c34;
+          color: $color-text;
           margin: 0;
           font-size: 1.2rem;
         }

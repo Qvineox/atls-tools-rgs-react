@@ -9,6 +9,29 @@ import loading from "./Pulse-0.9s-800px.gif";
 import ATLSError from "../../../models/error";
 import {toast} from "react-toastify";
 
+function fetchReports(query: IReportsQuery) {
+    let _startDate = moment(query.startDate)
+    let _endDate = moment(query.endDate)
+
+    const types = query.types.map(item => {
+        return item.value
+    })
+
+    _startDate.set('hour', 0).set('minutes', 0)
+    _endDate.set('hour', 23).set('minutes', 59)
+
+    return axios({
+        method: 'GET',
+        url: process.env.REACT_APP_BACKEND_URL + "/api/reporting/reports",
+        params: {
+            'start_date': _startDate.toISOString(),
+            'end_date': _endDate.toISOString(),
+            'types': `[${types.join(',')}]`
+        }
+    })
+
+}
+
 export default function History() {
     const today = moment()
     const [queryFilter, setQueryFilter] = useState<IReportsQuery>({
@@ -29,7 +52,7 @@ export default function History() {
         let _startDate = moment(queryFilter.startDate)
         let _endDate = moment(queryFilter.endDate)
 
-        if (_endDate < _startDate) {
+        if (queryFilter && _endDate < _startDate) {
             toast.error("Неправильно выбран диапазон.")
 
             document.getElementById('start-date')?.classList.add('error')
@@ -38,22 +61,7 @@ export default function History() {
             document.getElementById('start-date')?.classList.remove('error')
             document.getElementById('end-date')?.classList.remove('error')
 
-            const types = queryFilter.types.map(item => {
-                return item.value
-            })
-
-            _startDate.set('hour', 0).set('minutes', 0)
-            _endDate.set('hour', 23).set('minutes', 59)
-
-            axios({
-                method: 'GET',
-                url: process.env.REACT_APP_BACKEND_URL + "/api/reporting/reports",
-                params: {
-                    'start_date': _startDate.toISOString(),
-                    'end_date': _endDate.toISOString(),
-                    'types': `[${types.join(',')}]`
-                }
-            }).then(response => {
+            fetchReports(queryFilter).then(response => {
                 if (response.data) {
                     const reports = response.data as Array<IReportCardProps>
                     setReportsList(reports)

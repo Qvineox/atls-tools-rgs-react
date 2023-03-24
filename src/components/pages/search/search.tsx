@@ -1,7 +1,6 @@
-import React, {ChangeEvent, Fragment, useEffect, useState} from "react";
-import Navbar from "../../navigation/navbar";
+import React, {Fragment, useEffect, useState} from "react";
 import './search.scss'
-import {IEmployeeAssignment, IEmployeeCardFull, IEmployeeCardPreview} from "../../../models/employeeCard";
+import {IEmployeeAssignment, IEmployeeCardFull, IEmployeeCardPreview} from "../../../models/employees/employeeCard";
 import {EmployeeCardPreview} from "../../fragments/employeeCards";
 import axios from "axios";
 import moment from "moment";
@@ -22,7 +21,7 @@ export default function Search() {
         } else {
             setSelectedEmployeeId(undefined)
         }
-    }, [foundEmployees])
+    }, [selectedEmployeeId, foundEmployees])
 
     return (
         <Fragment>
