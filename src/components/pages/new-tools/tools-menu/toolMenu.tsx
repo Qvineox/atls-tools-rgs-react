@@ -1,4 +1,4 @@
-import {Fragment, ReactNode, useState} from "react";
+import {ReactNode, useState} from "react";
 
 import './tools-menu.scss'
 import arrow from './arrow-icon.svg'
@@ -21,9 +21,15 @@ export default function ToolsMenu() {
             <ToolCard name={`Регулярные блокировки`}
                       description={`Формирование списков блокировок отсутствующих сотрудников`}
                       url={`/tools/blocklist-regular`}/>
+
+        </ToolCardGroup>
+        <ToolCardGroup defaultOpen={true} name={`Запросы ДЭБ`}>
             <ToolCard name={`Блокирование пользователей`}
                       description={`Формирование списков блокировок согласно по списку пользователей`}
                       url={`/tools/blocklist-security`}/>
+            <ToolCard name={`Списки террористов`}
+                      description={`Формирование списка террористов по текстовому запросу`}
+                      url={`/tools/terrorists`}/>
         </ToolCardGroup>
     </div>)
 }

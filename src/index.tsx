@@ -19,6 +19,7 @@ import {SecurityBlockListTool} from "./components/pages/new-tools/blocklists/sec
 import History from "./components/pages/history/history";
 import ToolsMenu from "./components/pages/new-tools/tools-menu/toolMenu";
 import ReportInfo from "./components/pages/report/reportInfo";
+import {TerroristListTool} from "./components/pages/new-tools/security/terroristListTool";
 
 const router = createBrowserRouter([
     {
@@ -64,6 +65,10 @@ const router = createBrowserRouter([
                     {
                         path: '/tools/blocklist-security',
                         element: <SecurityBlockListTool/>
+                    },
+                    {
+                        path: '/tools/terrorists',
+                        element: <TerroristListTool/>
                     }
                 ]
             },

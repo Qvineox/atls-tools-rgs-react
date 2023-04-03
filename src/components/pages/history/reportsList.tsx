@@ -64,6 +64,10 @@ function ReportCard(props: IReportCardProps) {
             typeClass = `blocks-esd`
             break
         }
+        case 'Внесение террористов': {
+            typeClass = `terrorist-list`
+            break
+        }
         default:
             typeClass = `none`
     }

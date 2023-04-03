@@ -7,6 +7,7 @@ enum ReportType {
     REGULAR_BANS = 3,
     WEEKLY_BANS = 4,
     ASD_BANS = 5,
+    TERRORIST_LIST = 6,
 }
 interface IReportTypeSelect {
     value: ReportType,
@@ -60,7 +61,8 @@ export default function SearchBar(props: ISearchBarProps) {
                             {value: ReportType.WEEKLY_ACCESS, label: 'Еженедельный отчет по доступам'},
                             {value: ReportType.REGULAR_BANS, label: 'Регулярные блокировки'},
                             {value: ReportType.WEEKLY_BANS, label: 'Отчет по блокировкам'},
-                            {value: ReportType.ASD_BANS, label: 'Блокировки ДЭБ'}
+                            {value: ReportType.ASD_BANS, label: 'Блокировки ДЭБ'},
+                            {value: ReportType.TERRORIST_LIST, label: 'Внесение террористов'}
                         ]}/>
             </div>
         </div>

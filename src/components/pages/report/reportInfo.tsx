@@ -14,6 +14,7 @@ import {ToolFormResultViewer} from "../../fragments/forms/fragments/viewers/tool
 import ToolFormResultLoading from "../../fragments/forms/fragments/viewers/toolFormResultLoading";
 import moment from "moment";
 import ATLSError from "../../../models/error";
+import {TerroristReport} from "../../../models/reports/security/terrorists";
 
 interface IReportInfo {
     id: number
@@ -68,6 +69,9 @@ export default function ReportInfo() {
                     break
                 case 5:
                     setReportData(new BlockListSecurityReport(data.id, JSON.parse(data.content), []))
+                    break
+                case 6:
+                    setReportData(new TerroristReport(data.id, JSON.parse(data.content), []))
                     break
                 default:
                     setIsLoaded(false)

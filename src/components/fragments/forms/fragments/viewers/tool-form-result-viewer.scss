@@ -98,6 +98,21 @@
             width: 50%;
           }
         }
+
+        &.terrorists {
+          td.index {
+            width: 3%;
+            text-align: center;
+          }
+
+          td.first-name, td.middle-name, td.last-name {
+            width: 25%;
+          }
+
+          td.birth-date {
+            width: 20%;
+          }
+        }
       }
 
 
@@ -198,7 +213,7 @@
     min-width: 10vw;
 
     background-color: $color-block;
-    box-shadow: 4px 4px 4px 0 $color-border;
+    box-shadow: $default-shadow;
 
     h2, p {
       margin: 10px 20px;
